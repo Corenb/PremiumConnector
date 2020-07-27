@@ -1,0 +1,4 @@
+name: PremiumConnector
+version: 2.0
+author: [LLIcocoman_Hrz]
+main: eu.horyzon.premiumconnector.PremiumConnector
