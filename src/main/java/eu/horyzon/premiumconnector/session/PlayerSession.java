@@ -13,7 +13,7 @@ import net.md_5.bungee.api.connection.PendingConnection;
 
 public class PlayerSession {
 	private static String SQL_SELECT = "SELECT Premium FROM %s WHERE Name='%s';",
-			SQL_UPDATE = "INSERT INTO %s VALUES('%s', %3$b) ON DUPLICATE KEY UPDATE Premium = %3$b;";
+			SQL_UPDATE = "INSERT INTO %s(Name, Premium) VALUES('%s', %3$b) ON DUPLICATE KEY UPDATE Premium = %3$b;";
 
 	protected String name;
 	protected boolean premium = false;
