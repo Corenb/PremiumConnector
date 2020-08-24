@@ -57,7 +57,8 @@ public class PremiumCheck implements Runnable {
 						plugin.getLogger().fine("Data successfully loaded from Resolver for player" + name);
 						playerSession.setPremium(true);
 
-						plugin.getPlayerSession().put(name + ip, playerSession);
+						if (plugin.isSecondAttempt())
+							plugin.getPlayerSession().put(name + ip, playerSession);
 						plugin.getLogger().fine("Player " + name + " defined as premium.");
 					} else
 						plugin.getLogger().fine("Player " + name + " defined as cracked cause no Mojang profile found.");
