@@ -28,7 +28,9 @@ public class ServerConnectListener implements Listener {
 		plugin.getLogger().fine("Player " + name + " is joining on host " + host);
 
 		if (!player.getPendingConnection().isOnlineMode()) {
-			plugin.getRedirectionRequests().put(name, event.getTarget());
+			plugin.getRedirectionRequests().put(name.toLowerCase(), event.getTarget());
+			plugin.getLogger().fine("Cracked player " + name + " was redirected on the cracked server "
+					+ plugin.getCrackedServer().getName());
 			event.setTarget(plugin.getCrackedServer());
 		}
 

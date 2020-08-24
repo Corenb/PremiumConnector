@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.geysermc.common.ChatColor;
+
 import eu.horyzon.premiumconnector.PremiumConnector;
 import eu.horyzon.premiumconnector.config.Message;
 import eu.horyzon.premiumconnector.session.PlayerSession;
@@ -18,15 +20,15 @@ public class PremiumCommand extends Command {
 	private final Map<UUID, Long> confirm = new HashMap<>();
 
 	public PremiumCommand(PremiumConnector plugin, int timeToConfirm) {
-		super("premium");
+		super("premium", "premiumconnector.command", "prem");
 		this.timeToConfirm = timeToConfirm;
 	}
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		if (!(sender instanceof ProxiedPlayer)) {
-			sender.sendMessage(
-					new TextComponent(Message.PREFIX.toString() + "You need to be a player to execute this command."));
+			sender.sendMessage(new TextComponent(
+					Message.PREFIX.toString() + ChatColor.RED + "You need to be a player to execute this command."));
 			return;
 		}
 

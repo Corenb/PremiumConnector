@@ -6,7 +6,21 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
 
 public enum Message {
-	PREFIX("prefix", ""), MYSQL_ERROR("mySQLError", "|-\r\n" + "  &c          Database error!\r\n" + "  &cPlease retry later or contact an administrator"), NOT_PREMIUM_ERROR("announceReward", "|-\r\n" + "  &2     You're not the owner of this account\r\n" + "  &2Please change your username to join our server!"), MOJANG_SERVER_ERROR("mojangServerError", "|-\r\n" + "  &c       Authentification error\r\n" + "  &cMojang's servers are currently down, please retry later!"), RATE_LIMIT("rateLimit", "|-\r\n  &c       Authentification overload\r\n  &cAuthentificate process is currently overload. Please retry in one minute"), WARN_COMMAND("warnCommand", "%prefix% &c&lWARNING &6This command should &lonly &6be invoked if you are the owner of this paid minecraft account. Type &a/premium &6command again to confirm."), PREMIUM_COMMAND("premiumCommand", "%prefix% &6You are now &lPremium &6you need to reconnect you to the server to show correcly you skin.");
+	PREFIX("prefix", ""),
+	MYSQL_ERROR("mySQLError",
+			"|-\r\n" + "  &c          Database error!\r\n" + "  &cPlease retry later or contact an administrator"),
+	NOT_PREMIUM_ERROR("announceReward",
+			"|-\r\n" + "  &2     You're not the owner of this account\r\n"
+					+ "  &2Please change your username to join our server!"),
+	MOJANG_SERVER_ERROR("mojangServerError",
+			"|-\r\n" + "  &c       Authentification error\r\n"
+					+ "  &cMojang's servers are currently down, please retry later!"),
+	RATE_LIMIT("rateLimit",
+			"|-\r\n  &c       Authentification overload\r\n  &cAuthentificate process is currently overload. Please retry in one minute"),
+	WARN_COMMAND("warnCommand",
+			"%prefix% &c&lWARNING &6This command should &lonly &6be invoked if you are the owner of this paid minecraft account. Type &a/premium &6command again to confirm."),
+	PREMIUM_COMMAND("premiumCommand",
+			"%prefix% &6You are now &lPremium &6you need to reconnect you to the server to show correcly you skin.");
 
 	private final String key;
 	private String message;

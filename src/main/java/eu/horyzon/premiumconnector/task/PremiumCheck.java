@@ -1,6 +1,5 @@
 package eu.horyzon.premiumconnector.task;
 
-import java.net.SocketAddress;
 import java.sql.SQLException;
 import java.util.UUID;
 
@@ -27,16 +26,22 @@ public class PremiumCheck implements Runnable {
 	public void run() {
 		PendingConnection connection = event.getConnection();
 		String name = connection.getName();
-		SocketAddress address = connection.getSocketAddress();
+		String address = connection.getSocketAddress().toString();
+		String ip = address.substring(1, address.indexOf(':'));
+
+		plugin.getLogger().fine("Starting premium check for player " + connection.getName() + " logging with ip " + ip);
 
 		PlayerSession playerSession;
-		if ( (playerSession = plugin.getPlayerSession().get(name + address)) != null) {
+		if ( (playerSession = plugin.getPlayerSession().get(name + ip)) != null) {
 			plugin.getLogger().fine("Player " + name + " try to connect for the second attempt.");
 			if (plugin.isSecondAttempt()) {
 				playerSession.setPremium(false);
+				plugin.getLogger().fine("Defining connection for player " + name + " to premium.");
 				connection.setOnlineMode(playerSession.isPremium());
-			} else
+			} else {
+				plugin.getLogger().fine("Event canceled for player " + name + " cause is using a premium username.");
 				event.setCancelReason(Message.NOT_PREMIUM_ERROR.getTextComponent());
+			}
 		} else
 			try {
 				try {
@@ -46,17 +51,19 @@ public class PremiumCheck implements Runnable {
 					playerSession = new PlayerSession(connection);
 					plugin.getLogger().fine(name + " is a new player. Data successfully created.");
 					// Check if player is premium
-					if (!isBedrockPlayer(connection.getUniqueId()) && plugin.getResolver().findProfile(name).isPresent()) {
+					if (isBedrockPlayer(connection.getUniqueId()))
+						plugin.getLogger().fine("Player " + name + " defined as cracked cause is Bedrock player.");
+					else if(plugin.getResolver().findProfile(name).isPresent()) {
 						plugin.getLogger().fine("Data successfully loaded from Resolver for player" + name);
 						playerSession.setPremium(true);
 
-						plugin.getPlayerSession().put(name + address, playerSession);
+						plugin.getPlayerSession().put(name + ip, playerSession);
 						plugin.getLogger().fine("Player " + name + " defined as premium.");
 					} else
-						plugin.getLogger().fine("Player " + name + " defined as cracked.");
+						plugin.getLogger().fine("Player " + name + " defined as cracked cause no Mojang profile found.");
 				}
 
-					connection.setOnlineMode(playerSession.isPremium());
+				connection.setOnlineMode(playerSession.isPremium());
 			} catch (RateLimitException exception) {
 				exception.printStackTrace();
 				plugin.getLogger().warning("Rate limit reached when trying to load " + name + " account.");

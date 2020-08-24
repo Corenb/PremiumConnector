@@ -45,6 +45,7 @@ public class PremiumConnector extends Plugin {
 			Configuration config = loadConfiguration(getDataFolder(), "config.yml");
 
 			getLogger().setLevel(Level.parse(config.getString("debug", "INFO")));
+			getLogger().info("Debug level set to " + getLogger().getLevel());
 
 			floodgate = getProxy().getPluginManager().getPlugin("floodgate") != null;
 			crackedServer = getProxy().getServerInfo(config.getString("authServer"));

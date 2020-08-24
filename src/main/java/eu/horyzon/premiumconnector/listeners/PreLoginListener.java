@@ -20,8 +20,6 @@ public class PreLoginListener implements Listener {
 			return;
 
 		event.registerIntent(plugin);
-		plugin.getLogger().fine("Starting premium check for player " + event.getConnection().getName()
-				+ " logging with ip " + event.getConnection().getSocketAddress());
 		plugin.getProxy().getScheduler().runAsync(plugin, new PremiumCheck(plugin, event));
 	}
 }
