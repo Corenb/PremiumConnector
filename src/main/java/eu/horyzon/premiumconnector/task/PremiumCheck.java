@@ -39,26 +39,28 @@ public class PremiumCheck implements Runnable {
 				plugin.getLogger().fine("Defining connection for player " + name + " to premium.");
 				connection.setOnlineMode(playerSession.isPremium());
 			} else {
-				plugin.getLogger().fine("Event canceled for player " + name + " cause is using a premium username.");
+				plugin.getLogger().fine("Event canceled for player " + name + " cause is using a premium username and second attempt isn't enabled in config file.");
 				event.setCancelReason(Message.NOT_PREMIUM_ERROR.getTextComponent());
 			}
 		} else
 			try {
 				try {
 					playerSession = PlayerSession.loadFromName(name);
-					plugin.getLogger().fine("Data successfully loaded from SQL for player " + name);
+					plugin.getLogger().fine("Data successfully loaded from SQL for player " + name + " as " + (playerSession.isPremium() ? "premium" : "cracked") + ".");
 				} catch (NullPointerException exception) {
 					playerSession = new PlayerSession(connection);
-					plugin.getLogger().fine(name + " is a new player. Data successfully created.");
+
 					// Check if player is premium
 					if (isBedrockPlayer(connection.getUniqueId()))
 						plugin.getLogger().fine("Player " + name + " defined as cracked cause is Bedrock player.");
 					else if(plugin.getResolver().findProfile(name).isPresent()) {
-						plugin.getLogger().fine("Data successfully loaded from Resolver for player" + name);
+						plugin.getLogger().fine("Profile resolver found a profile for the player" + name + " ");
 						playerSession.setPremium(true);
 
 						if (plugin.isSecondAttempt())
 							plugin.getPlayerSession().put(name + ip, playerSession);
+						else
+							playerSession.update();
 						plugin.getLogger().fine("Player " + name + " defined as premium.");
 					} else
 						plugin.getLogger().fine("Player " + name + " defined as cracked cause no Mojang profile found.");

@@ -3,6 +3,7 @@ package eu.horyzon.premiumconnector.listeners;
 import java.sql.SQLException;
 
 import eu.horyzon.premiumconnector.PremiumConnector;
+import eu.horyzon.premiumconnector.session.PlayerSession;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent.Reason;
@@ -23,7 +24,7 @@ public class ServerConnectListener implements Listener {
 			return;
 
 		if (event.getReason() != Reason.JOIN_PROXY) {
-			event.setCancelled(plugin.getRedirectionRequests().containsKey(event.getPlayer().getName()));
+			event.setCancelled(plugin.getRedirectionRequests().containsKey(event.getPlayer().getName().toLowerCase()));
 			return;
 		}
 
@@ -40,8 +41,9 @@ public class ServerConnectListener implements Listener {
 		}
 
 		try {
-			if (plugin.getPlayerSession().containsKey(name + player.getSocketAddress()))
-				plugin.getPlayerSession().remove(name + player.getSocketAddress()).update();
+			PlayerSession session = plugin.getPlayerSession().remove(name + player.getSocketAddress());
+			if (session != null)
+				session.update();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			plugin.getLogger().warning("SQL error on updating player" + name);
