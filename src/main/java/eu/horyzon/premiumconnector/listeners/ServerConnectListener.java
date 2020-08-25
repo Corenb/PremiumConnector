@@ -19,8 +19,13 @@ public class ServerConnectListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onServerConnect(ServerConnectEvent event) {
-		if (event.isCancelled() || event.getReason() != Reason.JOIN_PROXY)
+		if (event.isCancelled())
 			return;
+
+		if (event.getReason() != Reason.JOIN_PROXY) {
+			event.setCancelled(plugin.getRedirectionRequests().containsKey(event.getPlayer().getName()));
+			return;
+		}
 
 		ProxiedPlayer player = event.getPlayer();
 		String name = player.getName();
