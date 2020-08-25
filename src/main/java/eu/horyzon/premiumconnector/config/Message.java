@@ -20,7 +20,8 @@ public enum Message {
 	WARN_COMMAND("warnCommand",
 			"%prefix% &c&lWARNING &6This command should &lonly &6be invoked if you are the owner of this paid minecraft account. Type &a/premium &6command again to confirm."),
 	PREMIUM_COMMAND("premiumCommand",
-			"%prefix% &6You are now &lPremium &6you need to reconnect you to the server to show correcly you skin.");
+			"%prefix% &6You are now &lPremium &6you need to reconnect you to the server to show correcly you skin."),
+	ALREADY_PREMIUM("alreadyPremium", "%prefix% &cYou are already a &6&lPremium &cuser.");
 
 	private final String key;
 	private String message;

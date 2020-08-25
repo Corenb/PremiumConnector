@@ -12,6 +12,7 @@ import eu.horyzon.premiumconnector.config.Message;
 import eu.horyzon.premiumconnector.session.PlayerSession;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
@@ -33,9 +34,19 @@ public class PremiumCommand extends Command {
 		}
 
 		ProxiedPlayer player = (ProxiedPlayer) sender;
-		if (confirm.containsKey(player.getUniqueId()) && canConfirm(confirm.remove(player.getUniqueId())))
+		if (canConfirm(confirm.remove(player.getUniqueId())))
 			try {
-				new PlayerSession(player.getPendingConnection(), true).update();
+				PendingConnection pendingConnection = player.getPendingConnection();
+				if (pendingConnection.isOnlineMode()) {
+					Message.ALREADY_PREMIUM.sendMessage(player);
+					return;
+				}
+
+				pendingConnection.setOnlineMode(true);
+				if (!pendingConnection.isConnected())
+					return;
+
+				new PlayerSession(pendingConnection).update();
 				sender.sendMessage(Message.PREMIUM_COMMAND.getTextComponent());
 				return;
 			} catch (SQLException e) {
