@@ -42,11 +42,9 @@ public class PremiumCommand extends Command {
 					return;
 				}
 
-				pendingConnection.setOnlineMode(true);
-				if (!pendingConnection.isConnected())
-					return;
-
-				new PlayerSession(pendingConnection).update();
+				PlayerSession playerSession = new PlayerSession(pendingConnection);
+				playerSession.setPremium(true);
+				playerSession.update();
 				sender.sendMessage(Message.PREMIUM_COMMAND.getTextComponent());
 				return;
 			} catch (SQLException e) {
