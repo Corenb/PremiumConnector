@@ -27,7 +27,7 @@ public class MessageChannelListener implements Listener {
 			return;
 
 		// Check if a player is not trying to send us a fake message
-		if (!(event.getSender() instanceof Server))
+		if (! (event.getSender() instanceof Server))
 			return;
 
 		// Read the plugin message
@@ -55,8 +55,7 @@ public class MessageChannelListener implements Listener {
 			String name = dataIn.readUTF();
 			ServerInfo server = plugin.getRedirectionRequests().remove(name);
 			plugin.getProxy().getPlayer(name).connect(server);
-			plugin.getLogger().fine("Plugin receive login message from Authme for player " + name
-					+ " and redirect him on " + server.getName() + " server.");
+			plugin.getLogger().fine("Plugin receive login message from Authme for player " + name + " and redirect him on " + server.getName() + " server.");
 		}
 	}
 }
