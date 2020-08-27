@@ -33,11 +33,9 @@ public class PremiumCheck implements Runnable {
 
 		PlayerSession playerSession;
 		if ( (playerSession = plugin.getPlayerSession().get(name + ip)) != null) {
-			plugin.getLogger().fine("Player " + name + " try to connect for the second attempt.");
 			if (plugin.isSecondAttempt()) {
 				playerSession.setPremium(false);
-				plugin.getLogger().fine("Defining connection for player " + name + " to premium.");
-				connection.setOnlineMode(playerSession.isPremium());
+				plugin.getLogger().fine("Player " + name + " try to connect for the second attempt and has been defined as premium.");
 			} else {
 				plugin.getLogger().fine("Event canceled for player " + name + " cause is using a premium username and second attempt isn't enabled in config file.");
 				event.setCancelReason(Message.NOT_PREMIUM_ERROR.getTextComponent());
@@ -54,7 +52,7 @@ public class PremiumCheck implements Runnable {
 					if (isBedrockPlayer(connection.getUniqueId()))
 						plugin.getLogger().fine("Player " + name + " defined as cracked cause is Bedrock player.");
 					else if(plugin.getResolver().findProfile(name).isPresent()) {
-						plugin.getLogger().fine("Profile resolver found a profile for the player" + name + " ");
+						plugin.getLogger().fine("Profile resolver found a profile for the player " + name + " ");
 						playerSession.setPremium(true);
 
 						if (plugin.isSecondAttempt())
@@ -65,8 +63,6 @@ public class PremiumCheck implements Runnable {
 					} else
 						plugin.getLogger().fine("Player " + name + " defined as cracked cause no Mojang profile found.");
 				}
-
-				connection.setOnlineMode(playerSession.isPremium());
 			} catch (RateLimitException exception) {
 				exception.printStackTrace();
 				plugin.getLogger().warning("Rate limit reached when trying to load " + name + " account.");
@@ -81,6 +77,7 @@ public class PremiumCheck implements Runnable {
 				event.setCancelReason(Message.MOJANG_SERVER_ERROR.getTextComponent());
 			}
 
+		connection.setOnlineMode(playerSession.isPremium());
 		event.completeIntent(plugin);
 	}
 
