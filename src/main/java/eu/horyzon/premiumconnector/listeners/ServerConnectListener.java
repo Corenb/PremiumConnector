@@ -35,13 +35,13 @@ public class ServerConnectListener implements Listener {
 
 		if (!player.getPendingConnection().isOnlineMode()) {
 			plugin.getRedirectionRequests().put(name.toLowerCase(), event.getTarget());
-			plugin.getLogger().fine("Cracked player " + name + " was redirected on the cracked server "
-					+ plugin.getCrackedServer().getName());
+			plugin.getLogger().fine("Cracked player " + name + " was redirected on the cracked server " + plugin.getCrackedServer().getName());
 			event.setTarget(plugin.getCrackedServer());
 		}
 
 		try {
-			PlayerSession session = plugin.getPlayerSession().remove(name + player.getSocketAddress());
+			String address = player.getPendingConnection().getSocketAddress().toString();
+			PlayerSession session = plugin.getPlayerSession().remove(name + address.substring(1, address.indexOf(':')));
 			if (session != null)
 				session.update();
 		} catch (SQLException e) {
