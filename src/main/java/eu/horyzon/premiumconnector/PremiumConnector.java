@@ -13,6 +13,7 @@ import com.github.games647.craftapi.resolver.MojangResolver;
 
 import eu.horyzon.premiumconnector.command.PremiumCommand;
 import eu.horyzon.premiumconnector.config.Message;
+import eu.horyzon.premiumconnector.listeners.DisconnectListener;
 import eu.horyzon.premiumconnector.listeners.MessageChannelListener;
 import eu.horyzon.premiumconnector.listeners.PreLoginListener;
 import eu.horyzon.premiumconnector.listeners.ServerConnectListener;
@@ -31,7 +32,7 @@ public class PremiumConnector extends Plugin {
 	private ServerInfo crackedServer;
 	private boolean floodgate, secondAttempt;
 
-	private Map<String, ServerInfo> redirectionRequests = new HashMap<>();
+	private Map<String, ServerInfo> pendingRedirections = new HashMap<>();
 	private Map<String, PlayerSession> playerSession = new HashMap<>();
 
 	@Override
@@ -121,7 +122,7 @@ public class PremiumConnector extends Plugin {
 	}
 
 	public Map<String, ServerInfo> getRedirectionRequests() {
-		return redirectionRequests;
+		return pendingRedirections;
 	}
 
 	public boolean isFloodgate() {
