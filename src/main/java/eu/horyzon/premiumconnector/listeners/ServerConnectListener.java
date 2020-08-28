@@ -30,9 +30,6 @@ public class ServerConnectListener implements Listener {
 
 		ProxiedPlayer player = event.getPlayer();
 		String name = player.getName();
-		String host = player.getPendingConnection().getVirtualHost().getHostName();
-		plugin.getLogger().fine("Player " + name + " is joining on host " + host);
-
 		if (!player.getPendingConnection().isOnlineMode()) {
 			plugin.getRedirectionRequests().put(name.toLowerCase(), event.getTarget());
 			plugin.getLogger().fine("Cracked player " + name + " was redirected on the cracked server " + plugin.getCrackedServer().getName());
