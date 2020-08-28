@@ -57,11 +57,12 @@ public class PremiumCheck implements Runnable {
 
 						if (plugin.isSecondAttempt())
 							plugin.getPlayerSession().put(name + ip, playerSession);
-						else
-							playerSession.update();
+
 						plugin.getLogger().fine("Player " + name + " defined as premium.");
 					} else
 						plugin.getLogger().fine("Player " + name + " defined as cracked cause no Mojang profile found.");
+
+					playerSession.update();
 				}
 			} catch (RateLimitException exception) {
 				exception.printStackTrace();
