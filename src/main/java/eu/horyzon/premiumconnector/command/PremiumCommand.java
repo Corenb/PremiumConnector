@@ -12,7 +12,6 @@ import eu.horyzon.premiumconnector.config.Message;
 import eu.horyzon.premiumconnector.session.PlayerSession;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
@@ -27,22 +26,21 @@ public class PremiumCommand extends Command {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		if (!(sender instanceof ProxiedPlayer)) {
-			sender.sendMessage(new TextComponent(
-					Message.PREFIX.toString() + ChatColor.RED + "You need to be a player to execute this command."));
+		if (! (sender instanceof ProxiedPlayer)) {
+			sender.sendMessage(new TextComponent(Message.PREFIX.toString() + ChatColor.RED + "You need to be a player to execute this command."));
 			return;
 		}
 
 		ProxiedPlayer player = (ProxiedPlayer) sender;
+		if (player.getPendingConnection().isOnlineMode()) {
+			Message.ALREADY_PREMIUM.sendMessage(player);
+			return;
+		}
+
 		if (canConfirm(confirm.remove(player.getUniqueId())))
 			try {
-				PendingConnection pendingConnection = player.getPendingConnection();
-				if (pendingConnection.isOnlineMode()) {
-					Message.ALREADY_PREMIUM.sendMessage(player);
-					return;
-				}
 
-				PlayerSession playerSession = new PlayerSession(pendingConnection);
+				PlayerSession playerSession = new PlayerSession(player.getPendingConnection());
 				playerSession.setPremium(true);
 				playerSession.update();
 				sender.sendMessage(Message.PREMIUM_COMMAND.getTextComponent());
