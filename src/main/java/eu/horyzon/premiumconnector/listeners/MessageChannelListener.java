@@ -4,7 +4,6 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
 import eu.horyzon.premiumconnector.PremiumConnector;
-import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -53,9 +52,8 @@ public class MessageChannelListener implements Listener {
 		switch (type) {
 		case "login":
 			String name = dataIn.readUTF();
-			ServerInfo server = plugin.getRedirectionRequests().remove(name);
-			plugin.getProxy().getPlayer(name).connect(server);
-			plugin.getLogger().fine("Plugin receive login message from Authme for player " + name + " and redirect him on " + server.getName() + " server.");
+			plugin.redirect(name);
+			plugin.getLogger().fine("Plugin receive login message from AuthMe for player " + name + ".");
 		}
 	}
 }

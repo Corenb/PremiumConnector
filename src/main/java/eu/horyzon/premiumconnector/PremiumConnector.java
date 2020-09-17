@@ -13,7 +13,7 @@ import com.github.games647.craftapi.resolver.MojangResolver;
 
 import eu.horyzon.premiumconnector.command.PremiumCommand;
 import eu.horyzon.premiumconnector.config.Message;
-import eu.horyzon.premiumconnector.listeners.DisconnectListener;
+import eu.horyzon.premiumconnector.listeners.LockLoginListener;
 import eu.horyzon.premiumconnector.listeners.MessageChannelListener;
 import eu.horyzon.premiumconnector.listeners.PreLoginListener;
 import eu.horyzon.premiumconnector.listeners.ServerConnectListener;
@@ -30,7 +30,8 @@ public class PremiumConnector extends Plugin {
 	private MojangResolver resolver;
 	private DataSource source;
 	private ServerInfo crackedServer;
-	private boolean floodgate, secondAttempt;
+	private boolean floodgate,
+			secondAttempt;
 
 	private Map<String, ServerInfo> pendingRedirections = new HashMap<>();
 	private Map<String, PlayerSession> playerSession = new HashMap<>();
@@ -62,10 +63,7 @@ public class PremiumConnector extends Plugin {
 			// Setup Database
 			Configuration configBackend = config.getSection("backend");
 			try {
-				source = new DataSource(this, configBackend.getString("driver"), configBackend.getString("host"),
-						configBackend.getInt("port", 3306), configBackend.getString("user"),
-						configBackend.getString("password"), configBackend.getString("database"),
-						configBackend.getString("table"), configBackend.getBoolean("useSSL", true));
+				source = new DataSource(this, configBackend.getString("driver"), configBackend.getString("host"), configBackend.getInt("port", 3306), configBackend.getString("user"), configBackend.getString("password"), configBackend.getString("database"), configBackend.getString("table"), configBackend.getBoolean("useSSL", true));
 			} catch (SQLException exception) {
 				exception.printStackTrace();
 				getLogger().warning("Please configure your database informations.");
@@ -74,11 +72,21 @@ public class PremiumConnector extends Plugin {
 
 			Message.setup(loadConfiguration(getDataFolder(), "message.yml"));
 
-			getProxy().getPluginManager().registerCommand(this,
-					new PremiumCommand(this, config.getInt("timeToConfirm", 30)));
+			getProxy().getPluginManager().registerCommand(this, new PremiumCommand(this, config.getInt("timeToConfirm", 30)));
 			getProxy().getPluginManager().registerListener(this, new PreLoginListener(this));
-			getProxy().getPluginManager().registerListener(this, new MessageChannelListener(this));
 			getProxy().getPluginManager().registerListener(this, new ServerConnectListener(this));
+			switch (LoginPlugin.valueOf(config.getString("loginPlugin", "AuthMe").toUpperCase())) {
+			case AuthMe:
+				getProxy().getPluginManager().registerListener(this, new MessageChannelListener(this));
+				getLogger().info("AuthMe hook enabled.");
+				break;
+			case LockLogin:
+				getProxy().getPluginManager().registerListener(this, new LockLoginListener(this));
+				getLogger().info("LockLogin hook enabled.");
+				break;
+			default:
+				break;
+			}
 		} catch (IOException exception) {
 			exception.printStackTrace();
 			getLogger().warning("Error on loading configuration file...");
@@ -127,5 +135,9 @@ public class PremiumConnector extends Plugin {
 
 	public boolean isFloodgate() {
 		return floodgate;
+	}
+
+	public void redirect(String name) {
+		getProxy().getPlayer(name).connect(pendingRedirections.remove(name));
 	}
 }
