@@ -28,6 +28,3 @@ secondAttempt: true
 
 # Time to confirm /premium command
 timeToConfirm: 30
-
-# Support AuthMe and LockLogin. Set to none if you don't use them.
-loginPlugin: AuthMe

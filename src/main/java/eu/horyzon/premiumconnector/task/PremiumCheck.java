@@ -35,7 +35,7 @@ public class PremiumCheck implements Runnable {
 		if ( (playerSession = plugin.getPlayerSession().get(name + ip)) != null) {
 			if (plugin.isSecondAttempt()) {
 				playerSession.setPremium(false);
-				plugin.getLogger().fine("Player " + name + " try to connect for the second attempt and has been defined as premium.");
+				plugin.getLogger().fine("Player " + name + " try to connect for the second attempt and has been defined as cracked.");
 			} else {
 				plugin.getLogger().fine("Event canceled for player " + name + " cause is using a premium username and second attempt isn't enabled in config file.");
 				event.setCancelReason(Message.NOT_PREMIUM_ERROR.getTextComponent());
@@ -51,7 +51,7 @@ public class PremiumCheck implements Runnable {
 					// Check if player is premium
 					if (isBedrockPlayer(connection.getUniqueId()))
 						plugin.getLogger().fine("Player " + name + " defined as cracked cause is Bedrock player.");
-					else if(plugin.getResolver().findProfile(name).isPresent()) {
+					else if (plugin.getResolver().findProfile(name).isPresent()) {
 						plugin.getLogger().fine("Profile resolver found a profile for the player " + name + " ");
 						playerSession.setPremium(true);
 

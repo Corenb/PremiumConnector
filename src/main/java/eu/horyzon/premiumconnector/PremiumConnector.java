@@ -75,17 +75,12 @@ public class PremiumConnector extends Plugin {
 			getProxy().getPluginManager().registerCommand(this, new PremiumCommand(this, config.getInt("timeToConfirm", 30)));
 			getProxy().getPluginManager().registerListener(this, new PreLoginListener(this));
 			getProxy().getPluginManager().registerListener(this, new ServerConnectListener(this));
-			switch (LoginPlugin.valueOf(config.getString("loginPlugin", "AuthMe").toUpperCase())) {
-			case AuthMe:
-				getProxy().getPluginManager().registerListener(this, new MessageChannelListener(this));
-				getLogger().info("AuthMe hook enabled.");
-				break;
-			case LockLogin:
+			if (getProxy().getPluginManager().getPlugin("LockLogin") != null) {
 				getProxy().getPluginManager().registerListener(this, new LockLoginListener(this));
 				getLogger().info("LockLogin hook enabled.");
-				break;
-			default:
-				break;
+			} else {
+				getProxy().getPluginManager().registerListener(this, new MessageChannelListener(this));
+				getLogger().info("AuthMe hook enabled.");
 			}
 		} catch (IOException exception) {
 			exception.printStackTrace();
