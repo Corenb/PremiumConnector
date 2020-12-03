@@ -1,5 +1,5 @@
 name: PremiumConnector
-version: 2.2.1
+version: 2.2.2
 author: [LLIcocoman_Hrz]
 main: eu.horyzon.premiumconnector.PremiumConnector
 softDepends: [LockLogin]

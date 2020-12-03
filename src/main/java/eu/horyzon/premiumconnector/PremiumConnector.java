@@ -19,6 +19,10 @@ import eu.horyzon.premiumconnector.listeners.PreLoginListener;
 import eu.horyzon.premiumconnector.listeners.ServerConnectListener;
 import eu.horyzon.premiumconnector.session.PlayerSession;
 import eu.horyzon.premiumconnector.sql.DataSource;
+import ml.karmaconfigs.lockloginmodules.bungee.Module;
+import ml.karmaconfigs.lockloginmodules.bungee.ModuleLoader;
+import ml.karmaconfigs.lockloginmodules.shared.NoJarException;
+import ml.karmaconfigs.lockloginmodules.shared.NoPluginException;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -76,6 +80,21 @@ public class PremiumConnector extends Plugin {
 			getProxy().getPluginManager().registerListener(this, new PreLoginListener(this));
 			getProxy().getPluginManager().registerListener(this, new ServerConnectListener(this));
 			if (getProxy().getPluginManager().getPlugin("LockLogin") != null) {
+				Module module = new LockLoginListener(this);
+
+				/*
+				 * ModuleLoader package depends on what platform are you in, if you are in bungee, use ml.karmaconfigs.lockloginmodules.bungee but if you are in spigot, use
+				 * ml.karmaconfigs.lockloginmodules.spigot
+				 */
+				ModuleLoader loader = new ModuleLoader(module);
+
+				//Check if the module is already loaded
+				try {
+					loader.inject();
+				} catch (IOException | NoJarException | NoPluginException ex) {
+					ex.printStackTrace();
+				}
+
 				getProxy().getPluginManager().registerListener(this, new LockLoginListener(this));
 				getLogger().info("LockLogin hook enabled.");
 			} else {

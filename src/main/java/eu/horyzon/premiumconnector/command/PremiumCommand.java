@@ -5,11 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.geysermc.common.ChatColor;
-
 import eu.horyzon.premiumconnector.PremiumConnector;
 import eu.horyzon.premiumconnector.config.Message;
 import eu.horyzon.premiumconnector.session.PlayerSession;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;

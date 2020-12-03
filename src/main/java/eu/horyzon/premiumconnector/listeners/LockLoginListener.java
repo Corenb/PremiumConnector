@@ -1,19 +1,53 @@
 package eu.horyzon.premiumconnector.listeners;
 
+import org.jetbrains.annotations.NotNull;
+
 import eu.horyzon.premiumconnector.PremiumConnector;
-import ml.karmaconfigs.LockLogin.BungeeCord.API.PlayerAPI;
-import ml.karmaconfigs.LockLogin.BungeeCord.API.Events.PlayerRegisterEvent;
-import ml.karmaconfigs.LockLogin.BungeeCord.API.Events.PlayerVerifyEvent;
+import ml.karmaconfigs.lockloginmodules.bungee.Module;
+import ml.karmaconfigs.lockloginsystem.bungeecord.api.PlayerAPI;
+import ml.karmaconfigs.lockloginsystem.bungeecord.api.events.PlayerRegisterEvent;
+import ml.karmaconfigs.lockloginsystem.bungeecord.api.events.PlayerVerifyEvent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.event.EventHandler;
 
-public class LockLoginListener implements Listener {
+public class LockLoginListener extends Module implements Listener {
 	private final PremiumConnector plugin;
 
 	public LockLoginListener(PremiumConnector plugin) {
 		this.plugin = plugin;
+	}
+
+	@Override
+	public @NotNull String author() {
+		return "LLIcocoman_Hrz";
+	}
+
+	@Override
+	public @NotNull String author_url() {
+		return "https://www.spigotmc.org/members/llicocoman.26529/#resources";
+	}
+
+	@Override
+	public @NotNull String description() {
+		return "This is the module used to access LockLogin API";
+	}
+
+	@Override
+	public @NotNull String name() {
+		return "PremiumConnector module";
+	}
+
+	@Override
+	public @NotNull Plugin owner() {
+		return plugin;
+	}
+
+	@Override
+	public @NotNull String version() {
+		return "1.0.0";
 	}
 
 	@EventHandler
@@ -35,6 +69,6 @@ public class LockLoginListener implements Listener {
 		ProxiedPlayer player = event.getPlayer();
 
 		if (player.getPendingConnection().isOnlineMode())
-			new PlayerAPI(player).setLogged(true);
+			new PlayerAPI(this, player).setLogged(true);
 	}
 }

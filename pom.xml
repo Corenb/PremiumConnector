@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>eu.horyzon</groupId>
   <artifactId>PremiumConnector</artifactId>
-  <version>2.2.1</version>
+  <version>2.2.2</version>
   <build>
     <plugins>
       <plugin>
@@ -91,7 +91,7 @@
     <dependency>
       <groupId>ml.karmaconfigs</groupId>
       <artifactId>LockLogin</artifactId>
-      <version>1.0.0.5</version>
+      <version>1.0.1.2</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
