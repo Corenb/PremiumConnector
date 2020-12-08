@@ -80,23 +80,25 @@ public class PremiumConnector extends Plugin {
 			getProxy().getPluginManager().registerListener(this, new PreLoginListener(this));
 			getProxy().getPluginManager().registerListener(this, new ServerConnectListener(this));
 			if (getProxy().getPluginManager().getPlugin("LockLogin") != null) {
-				Module module = new LockLoginListener(this);
-
-				/*
-				 * ModuleLoader package depends on what platform are you in, if you are in bungee, use ml.karmaconfigs.lockloginmodules.bungee but if you are in spigot, use
-				 * ml.karmaconfigs.lockloginmodules.spigot
-				 */
-				ModuleLoader loader = new ModuleLoader(module);
-
-				//Check if the module is already loaded
 				try {
-					loader.inject();
-				} catch (IOException | NoJarException | NoPluginException ex) {
-					ex.printStackTrace();
-				}
+					Module module = new LockLoginListener(this);
 
-				getProxy().getPluginManager().registerListener(this, new LockLoginListener(this));
-				getLogger().info("LockLogin hook enabled.");
+					/*
+					 * ModuleLoader package depends on what platform are you in, if you are in bungee, use ml.karmaconfigs.lockloginmodules.bungee but if you are in spigot, use
+					 * ml.karmaconfigs.lockloginmodules.spigot
+					 */
+					ModuleLoader loader = new ModuleLoader(module);
+
+					//Check if the module is already loaded
+					try {
+						loader.inject();
+					} catch (IOException | NoJarException | NoPluginException ex) {
+						ex.printStackTrace();
+					}
+
+					getProxy().getPluginManager().registerListener(this, new LockLoginListener(this));
+					getLogger().info("LockLogin hook enabled.");
+				} catch (Throwable ignored) {}
 			} else {
 				getProxy().getPluginManager().registerListener(this, new MessageChannelListener(this));
 				getLogger().info("AuthMe hook enabled.");
