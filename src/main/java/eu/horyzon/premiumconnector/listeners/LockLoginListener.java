@@ -4,6 +4,9 @@ import org.jetbrains.annotations.NotNull;
 
 import eu.horyzon.premiumconnector.PremiumConnector;
 import ml.karmaconfigs.lockloginmodules.bungee.Module;
+import ml.karmaconfigs.lockloginmodules.bungee.ModuleLoader;
+import ml.karmaconfigs.lockloginmodules.shared.NoJarException;
+import ml.karmaconfigs.lockloginmodules.shared.NoPluginException;
 import ml.karmaconfigs.lockloginsystem.bungeecord.api.PlayerAPI;
 import ml.karmaconfigs.lockloginsystem.bungeecord.api.events.PlayerRegisterEvent;
 import ml.karmaconfigs.lockloginsystem.bungeecord.api.events.PlayerVerifyEvent;
@@ -18,6 +21,20 @@ public class LockLoginListener extends Module implements Listener {
 
 	public LockLoginListener(PremiumConnector plugin) {
 		this.plugin = plugin;
+		Module module = new LockLoginListener(this);
+
+		/*
+		 * ModuleLoader package depends on what platform are you in, if you are in bungee, use ml.karmaconfigs.lockloginmodules.bungee but if you are in spigot, use
+		 * ml.karmaconfigs.lockloginmodules.spigot
+		 */
+		ModuleLoader loader = new ModuleLoader(module);
+
+		//Check if the module is already loaded
+		try {
+			loader.inject();
+		} catch (IOException | NoJarException | NoPluginException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
