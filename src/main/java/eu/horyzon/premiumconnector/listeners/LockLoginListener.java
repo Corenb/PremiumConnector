@@ -1,5 +1,7 @@
 package eu.horyzon.premiumconnector.listeners;
 
+import java.io.IOException;
+
 import org.jetbrains.annotations.NotNull;
 
 import eu.horyzon.premiumconnector.PremiumConnector;
@@ -21,13 +23,12 @@ public class LockLoginListener extends Module implements Listener {
 
 	public LockLoginListener(PremiumConnector plugin) {
 		this.plugin = plugin;
-		Module module = new LockLoginListener(this);
 
 		/*
 		 * ModuleLoader package depends on what platform are you in, if you are in bungee, use ml.karmaconfigs.lockloginmodules.bungee but if you are in spigot, use
 		 * ml.karmaconfigs.lockloginmodules.spigot
 		 */
-		ModuleLoader loader = new ModuleLoader(module);
+		ModuleLoader loader = new ModuleLoader(this);
 
 		//Check if the module is already loaded
 		try {
