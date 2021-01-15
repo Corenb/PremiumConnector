@@ -1,4 +1,4 @@
-prefix: "&8[&6PremiumConnector&8] &6"
+prefix: "&8[&6PremiumConnector&8] &r"
 mySQLError: |-
   &c          Database error!
   &cPlease retry later or contact an administrator
@@ -11,6 +11,15 @@ mojanServerError: |-
 rateLimit: |-
   &c       Authentification overload
   &cAuthentificate process is currently overload. Please retry in one minute
-warnCommand: '%prefix% &c&lWARNING &6This command should &lonly &6be invoked if you are the owner of this paid minecraft account. Type &a/premium &6command again to confirm.'
-premiumCommand: '%prefix% &6You are now &lPremium &6you need to reconnect you to the server to show correcly you skin.'
-alreadyPremium: '%prefix% &cYou are already a &6&lPremium &cuser.'
+consoleCommand: '%prefix% &cPlease use /premium|cracked|reset [player]'
+noPermission: '%prefix% &cYou don''t have the permission to do this.'
+noPlayer: '%prefix% &cPlayer %player% not found.'
+warnCommand: '%prefix% &c&lWARNING &6This command should &lonly &6be invoked if you are the owner of this paid minecraft account. Type &a/%cmd% &6command again to confirm.'
+sucessCommand: '%prefix% &6You are now &l%status%&6, you need to reconnect you to the server to apply changes.'
+failCommand: '%prefix% &cYou are already a &6&l%status% &cuser.'
+sucessCommandOther: '%prefix% &6Player %player% is now &l%status&6, he need to reconnect to the server to apply changes.'
+failCommandOther: '%prefix% &cPlayer %player% is already &6&l%status% &cuser.'
+errorCommand: '&c%prefix% Error on executing this command. Please try again later or contact an administrator.'
+crackedStatus: 'Cracked'
+premiumStatus: 'Premium'
+resetStatus: 'Nul'
