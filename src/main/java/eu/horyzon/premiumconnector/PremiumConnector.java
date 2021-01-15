@@ -11,7 +11,8 @@ import java.util.logging.Level;
 
 import com.github.games647.craftapi.resolver.MojangResolver;
 
-import eu.horyzon.premiumconnector.command.PremiumCommand;
+import eu.horyzon.premiumconnector.command.CommandBase;
+import eu.horyzon.premiumconnector.command.CommandType;
 import eu.horyzon.premiumconnector.config.Message;
 import eu.horyzon.premiumconnector.listeners.LockLoginListener;
 import eu.horyzon.premiumconnector.listeners.MessageChannelListener;
@@ -32,7 +33,7 @@ public class PremiumConnector extends Plugin {
 	private ServerInfo crackedServer;
 	private boolean floodgate,
 			secondAttempt;
-
+	private int timeCommand;
 	private Map<String, ServerInfo> pendingRedirections = new HashMap<>();
 	private Map<String, PlayerSession> playerSession = new HashMap<>();
 
@@ -57,6 +58,7 @@ public class PremiumConnector extends Plugin {
 			}
 
 			secondAttempt = config.getBoolean("secondAttempt", true);
+			timeCommand = config.getInt("timeToConfirm", 30);
 			// Initialize MojangResolver
 			resolver = new MojangResolver();
 
@@ -70,9 +72,12 @@ public class PremiumConnector extends Plugin {
 				return;
 			}
 
-			Message.setup(loadConfiguration(getDataFolder(), "message.yml"));
+			Message.setup(loadConfiguration(new File(getDataFolder(), "locales"), "message_" + config.getString("locale", "en") + ".yml"));
 
-			getProxy().getPluginManager().registerCommand(this, new PremiumCommand(this, config.getInt("timeToConfirm", 30)));
+			// INITIATE COMMANDS
+			for (CommandType command : CommandType.values())
+				getProxy().getPluginManager().registerCommand(this, new CommandBase(this, command));
+
 			getProxy().getPluginManager().registerListener(this, new PreLoginListener(this));
 			getProxy().getPluginManager().registerListener(this, new ServerConnectListener(this));
 			if (getProxy().getPluginManager().getPlugin("LockLogin") != null) {
@@ -108,10 +113,6 @@ public class PremiumConnector extends Plugin {
 		return source;
 	}
 
-	public Map<String, PlayerSession> getPlayerSession() {
-		return playerSession;
-	}
-
 	public MojangResolver getResolver() {
 		return resolver;
 	}
@@ -120,16 +121,24 @@ public class PremiumConnector extends Plugin {
 		return crackedServer;
 	}
 
+	public boolean isFloodgate() {
+		return floodgate;
+	}
+
 	public boolean isSecondAttempt() {
 		return secondAttempt;
+	}
+
+	public int getTimeCommand() {
+		return timeCommand;
 	}
 
 	public Map<String, ServerInfo> getRedirectionRequests() {
 		return pendingRedirections;
 	}
 
-	public boolean isFloodgate() {
-		return floodgate;
+	public Map<String, PlayerSession> getPlayerSession() {
+		return playerSession;
 	}
 
 	public void redirect(String name) {
