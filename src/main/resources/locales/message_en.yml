@@ -11,7 +11,7 @@ mojanServerError: |-
 rateLimit: |-
   &c       Authentification overload
   &cAuthentificate process is currently overload. Please retry in one minute
-consoleCommand: '%prefix% &cPlease use /premium|cracked|reset [player]'
+consoleCommand: '%prefix% &cPlease use /%cmd% [player]'
 noPermission: '%prefix% &cYou don''t have the permission to do this.'
 noPlayer: '%prefix% &cPlayer %player% not found.'
 warnCommand: '%prefix% &c&lWARNING &6This command should &lonly &6be invoked if you are the owner of this paid minecraft account. Type &a/%cmd% &6command again to confirm.'

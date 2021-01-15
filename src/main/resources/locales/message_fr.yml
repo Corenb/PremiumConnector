@@ -1,0 +1,25 @@
+prefix: "&8[&6PremiumConnector&8] &r"
+mySQLError: |-
+  &c          Erreur base de donnée!
+  &cMerci de réessayer plus tard ou contacter un administrateur
+notPremiumError: |-
+  &2     Vous n'êtes pas le propriétaire du compte
+  &2Merci de modifier votre pseudo pour rejoindre le serveur!
+mojanServerError: |-
+  &c       Erreur d'authentification
+  &cLes serveurs de Mojang sont actuellement hors-ligne, veuillez réessayer plus tard!
+rateLimit: |-
+  &c       Erreur d'authentification
+  &cLe processus d'authentification est actuellement surchargé. Merci de réessayer dans 1 minute.
+consoleCommand: '%prefix% &cMerci d''utiliser /%cmd% [player]'
+noPermission: '%prefix% &cVous n''avez pas la permission d''executer la commande.'
+noPlayer: '%prefix% &cJoueur %player% inconnu.'
+warnCommand: '%prefix% &c&lATTENTION &6This command should &lonly &6be invoked if you are the owner of this paid minecraft account. Type &a/%cmd% &6command again to confirm.'
+sucessCommand: '%prefix% &6You are now &l%status%&6, you need to reconnect you to the server to apply changes.'
+failCommand: '%prefix% &cYou are already a &6&l%status% &cuser.'
+sucessCommandOther: '%prefix% &6Player %player% is now &l%status&6, he need to reconnect to the server to apply changes.'
+failCommandOther: '%prefix% &cPlayer %player% is already &6&l%status% &cuser.'
+errorCommand: '&c%prefix% Error on executing this command. Please try again later or contact an administrator.'
+crackedStatus: 'Crack'
+premiumStatus: 'Premium'
+noStatus: 'Non défini'

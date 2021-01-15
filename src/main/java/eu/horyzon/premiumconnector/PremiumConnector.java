@@ -72,7 +72,7 @@ public class PremiumConnector extends Plugin {
 				return;
 			}
 
-			Message.setup(loadConfiguration(getDataFolder(), "message.yml"));
+			Message.setup(loadConfiguration(new File(getDataFolder(), "locales"), "message_" + config.getString("locale", "en") + ".yml"));
 
 			// INITIATE COMMANDS
 			for (CommandType command : CommandType.values())
