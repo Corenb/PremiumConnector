@@ -1,4 +1,4 @@
-prefix: "&8[&6PremiumConnector&8] &r"
+prefix: "&8[&6PremiumConnector&8]&r"
 mySQLError: |-
   &c          Erreur base de donnée!
   &cMerci de réessayer plus tard ou contacter un administrateur
@@ -14,12 +14,12 @@ rateLimit: |-
 consoleCommand: '%prefix% &cMerci d''utiliser /%cmd% [player]'
 noPermission: '%prefix% &cVous n''avez pas la permission d''executer la commande.'
 noPlayer: '%prefix% &cJoueur %player% inconnu.'
-warnCommand: '%prefix% &c&lATTENTION &6This command should &lonly &6be invoked if you are the owner of this paid minecraft account. Type &a/%cmd% &6command again to confirm.'
-sucessCommand: '%prefix% &6You are now &l%status%&6, you need to reconnect you to the server to apply changes.'
-failCommand: '%prefix% &cYou are already a &6&l%status% &cuser.'
-sucessCommandOther: '%prefix% &6Player %player% is now &l%status&6, he need to reconnect to the server to apply changes.'
-failCommandOther: '%prefix% &cPlayer %player% is already &6&l%status% &cuser.'
-errorCommand: '&c%prefix% Error on executing this command. Please try again later or contact an administrator.'
+warnCommand: '%prefix% &c&lATTENTION &6Cette commande ne doit être invoquée &luniquement &6si vous êtes le propriétaire du compte Minecraft. Faites la commande &a/premium &6pour confirmer.'
+sucessCommand: '%prefix% &6Votre compte est désormais &l%status%&6, vous devez vous reconnecter pour appliquer les changements.'
+failCommand: '%prefix% &cVotre compte est déjà défini comme &6&l%status% &c.'
+sucessCommandOther: '%prefix% &6Le compte du joueur %player% est désormais &l%status&6, il/elle doit se reconnecter sur le serveur pour appliquer les changements.'
+failCommandOther: '%prefix% &cLe compte du joueur %player% est déjà défini comme &6&l%status% &.'
+errorCommand: '&c%prefix% Erreur lors de l'exécution de la commande. Merci de réessayer ou contacter un administrateur.'
 crackedStatus: 'Crack'
 premiumStatus: 'Premium'
 noStatus: 'Non défini'

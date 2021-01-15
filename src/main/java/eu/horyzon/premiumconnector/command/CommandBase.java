@@ -33,7 +33,7 @@ public class CommandBase extends Command {
 					update(sender, args[0], command);
 			} else if (sender instanceof ProxiedPlayer) {
 				UUID playerUUID = ((ProxiedPlayer) sender).getUniqueId();
-				if (canConfirm(confirm.remove(playerUUID)))
+				if (command != CommandType.PREMIUM || canConfirm(confirm.remove(playerUUID)))
 					update(sender, sender.getName(), command);
 				else {
 					Message.WARN_COMMAND.sendMessage(sender, "%cmd%", command.getCommandName(), "%status%", command.getStatus().toString());

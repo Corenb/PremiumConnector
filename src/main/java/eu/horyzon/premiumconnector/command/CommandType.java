@@ -3,7 +3,7 @@ package eu.horyzon.premiumconnector.command;
 import eu.horyzon.premiumconnector.config.Message;
 
 public enum CommandType {
-	PREMIUM("premium", "premiumconnector.command.premium", Message.PREMIUM_STATUS, "prem"), CRACKED("cracked", "premiumconnector.command.cracked", Message.CRACKED_STATUS, "crack"), RESET("reset", "premiumconnector.command.reset", Message.RESET_STATUS, "rst");
+	PREMIUM("premium", "premiumconnector.command.premium", Message.PREMIUM_STATUS, "prem"), CRACKED("cracked", "premiumconnector.command.cracked", Message.CRACKED_STATUS, "crack"), RESET("reset", "premiumconnector.command.reset", Message.NO_STATUS, "rst");
 
 	private final String commandName;
 	private final String permission;

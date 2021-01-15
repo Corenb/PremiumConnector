@@ -1,4 +1,4 @@
-prefix: "&8[&6PremiumConnector&8] &r"
+prefix: "&8[&6PremiumConnector&8]&r"
 mySQLError: |-
   &c          Database error!
   &cPlease retry later or contact an administrator
@@ -14,7 +14,7 @@ rateLimit: |-
 consoleCommand: '%prefix% &cPlease use /%cmd% [player]'
 noPermission: '%prefix% &cYou don''t have the permission to do this.'
 noPlayer: '%prefix% &cPlayer %player% not found.'
-warnCommand: '%prefix% &c&lWARNING &6This command should &lonly &6be invoked if you are the owner of this paid minecraft account. Type &a/%cmd% &6command again to confirm.'
+warnCommand: '%prefix% &c&lWARNING &6This command should &lonly &6be invoked if you are the owner of this paid minecraft account. Type &a/premium &6command again to confirm.'
 sucessCommand: '%prefix% &6You are now &l%status%&6, you need to reconnect you to the server to apply changes.'
 failCommand: '%prefix% &cYou are already a &6&l%status% &cuser.'
 sucessCommandOther: '%prefix% &6Player %player% is now &l%status&6, he need to reconnect to the server to apply changes.'
