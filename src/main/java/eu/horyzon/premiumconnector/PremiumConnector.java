@@ -72,7 +72,7 @@ public class PremiumConnector extends Plugin {
 				return;
 			}
 
-			Message.setup(loadConfiguration(new File(getDataFolder(), "locales"), "message_" + config.getString("locale", "en") + ".yml"));
+			Message.setup(loadConfiguration(getDataFolder(), "locales/message_" + config.getString("locale", "en") + ".yml"));
 
 			// INITIATE COMMANDS
 			for (CommandType command : CommandType.values())
@@ -95,12 +95,18 @@ public class PremiumConnector extends Plugin {
 
 	private Configuration loadConfiguration(File directory, String fileName) throws IOException {
 		File file = new File(directory, fileName);
-		if (!file.exists())
+		if (!file.exists()) {
+			if (file.getParentFile() != null)
+				file.getParentFile().mkdirs();
+
 			try (InputStream in = getResourceAsStream(fileName)) {
 				Files.copy(in, file.toPath());
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (NullPointerException exception) {
+				return loadConfiguration(directory, "message_en.yml");
+			} catch (IOException exception) {
+				exception.printStackTrace();
 			}
+		}
 
 		return ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
 	}
