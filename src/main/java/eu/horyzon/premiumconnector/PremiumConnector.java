@@ -66,9 +66,13 @@ public class PremiumConnector extends Plugin {
 			Configuration configBackend = config.getSection("backend");
 			try {
 				source = new DataSource(this, configBackend.getString("driver"), configBackend.getString("host"), configBackend.getInt("port", 3306), configBackend.getString("user"), configBackend.getString("password"), configBackend.getString("database"), configBackend.getString("table"), configBackend.getBoolean("useSSL", true));
-			} catch (SQLException exception) {
+			} catch (RuntimeException | SQLException exception) {
+				if (configBackend.getString("driver").contains("sqlite"))
+					getLogger().warning("Bungeecord don't support SQLite per default.\r\nIf you want to use SQLite, you need to install the driver yourself\r\nEasy way : https://www.spigotmc.org/resources/sqlite-for-bungeecord.57191/\r\nHard way : https://gist.github.com/games647/d2a57abf90f707c0bd1107e432c580f3");
+				else
+					getLogger().warning("Please configure your database informations.");
+
 				exception.printStackTrace();
-				getLogger().warning("Please configure your database informations.");
 				return;
 			}
 

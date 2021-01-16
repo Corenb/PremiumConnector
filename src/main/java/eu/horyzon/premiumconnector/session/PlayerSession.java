@@ -29,7 +29,7 @@ public class PlayerSession {
 
 	public static PlayerSession loadFromName(String name) throws NullPointerException, SQLException {
 		DataSource source = PremiumConnector.getInstance().getDataSource();
-		try (Connection con = source.getConnection(); Statement createStmt = con.createStatement()) {
+		try (Connection connection = source.getConnection(); Statement createStmt = connection.createStatement()) {
 			ResultSet result = createStmt.executeQuery(String.format(SQL_SELECT, source.getTable(), name));
 			if (result.next())
 				return new PlayerSession(name, result.getBoolean("Premium"));
