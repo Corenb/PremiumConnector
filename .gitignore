@@ -1,0 +1,10 @@
+# =========================
+# IDE Project Files
+# =========================
+*.classpath
+*.project
+*.prefs
+target/
+/bin/
+*.iml
+/.idea/
