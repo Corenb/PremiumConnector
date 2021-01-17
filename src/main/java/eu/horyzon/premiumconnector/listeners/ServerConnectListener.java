@@ -24,7 +24,7 @@ public class ServerConnectListener implements Listener {
 			return;
 
 		if (event.getReason() != Reason.JOIN_PROXY) {
-			event.setCancelled(plugin.getRedirectionRequests().containsKey(event.getPlayer().getName().toLowerCase()));
+			event.setCancelled(plugin.isBlockServerSwitch() && plugin.getRedirectionRequests().containsKey(event.getPlayer().getName().toLowerCase()));
 			return;
 		}
 

@@ -32,7 +32,8 @@ public class PremiumConnector extends Plugin {
 	private DataSource source;
 	private ServerInfo crackedServer;
 	private boolean floodgate,
-			secondAttempt;
+			secondAttempt,
+			blockServerSwitch;
 	private int timeCommand;
 	private Map<String, ServerInfo> pendingRedirections = new HashMap<>();
 	private Map<String, PlayerSession> playerSession = new HashMap<>();
@@ -58,6 +59,7 @@ public class PremiumConnector extends Plugin {
 			}
 
 			secondAttempt = config.getBoolean("secondAttempt", true);
+			blockServerSwitch = config.getBoolean("blockServerSwitch", true);
 			timeCommand = config.getInt("timeToConfirm", 30);
 			// Initialize MojangResolver
 			resolver = new MojangResolver();
@@ -137,6 +139,10 @@ public class PremiumConnector extends Plugin {
 
 	public boolean isSecondAttempt() {
 		return secondAttempt;
+	}
+
+	public boolean isBlockServerSwitch() {
+		return blockServerSwitch;
 	}
 
 	public int getTimeCommand() {
