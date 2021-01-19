@@ -10,7 +10,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import eu.horyzon.premiumconnector.PremiumConnector;
 
 public class DataSource {
-	private static String SQL_CREATE = "CREATE TABLE IF NOT EXISTS %s (Name VARCHAR(15) NOT NULL, Premium BOOLEAN, PRIMARY KEY (Name));";
+	private static String SQL_CREATE = "CREATE TABLE IF NOT EXISTS %s (Name VARCHAR(16) NOT NULL, Premium BOOLEAN, PRIMARY KEY (Name));";
 
 	private String table;
 	private HikariDataSource hikari;
