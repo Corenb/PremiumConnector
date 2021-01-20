@@ -37,6 +37,9 @@ authServer: crack
 # Allow cracked player to use premium username
 secondAttempt: true
 
+# Block player to switch server until they are logged in
+blockServerSwitch: true
+
 # Time to confirm /premium command
 timeToConfirm: 30
 ```
