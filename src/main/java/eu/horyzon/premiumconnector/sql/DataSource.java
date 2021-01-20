@@ -10,7 +10,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import eu.horyzon.premiumconnector.PremiumConnector;
 
 public class DataSource {
-	private static String SQL_CREATE = "CREATE TABLE IF NOT EXISTS %s (Name VARCHAR(16) NOT NULL, Premium BOOLEAN, PRIMARY KEY (Name));";
+	private static String SQL_CREATE = "CREATE TABLE IF NOT EXISTS %s (Name VARCHAR(16) NOT NULL, Premium BOOLEAN, PRIMARY KEY (Name));",
+			SQL_ALTER = "ALTER TABLE %s CHANGE Name VARCHAR(16) NOT NULL";
 
 	private String table;
 	private HikariDataSource hikari;
@@ -51,8 +52,13 @@ public class DataSource {
 	}
 
 	private void initDatabase() throws SQLException {
-		try (Connection con = getConnection(); Statement createStmt = con.createStatement()) {
-			createStmt.executeUpdate(String.format(SQL_CREATE, table));
+		try (Connection connection = getConnection(); Statement createStmt = connection.createStatement()) {
+			connection.setAutoCommit(false);
+
+			createStmt.addBatch(String.format(SQL_CREATE, table));
+			createStmt.addBatch(String.format(SQL_ALTER, table));
+
+			createStmt.executeBatch();
 		}
 	}
 
