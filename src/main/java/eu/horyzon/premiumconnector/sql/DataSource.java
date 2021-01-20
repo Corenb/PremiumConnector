@@ -11,7 +11,7 @@ import eu.horyzon.premiumconnector.PremiumConnector;
 
 public class DataSource {
 	private static String SQL_CREATE = "CREATE TABLE IF NOT EXISTS %s (Name VARCHAR(16) NOT NULL, Premium BOOLEAN, PRIMARY KEY (Name));",
-			SQL_ALTER = "ALTER TABLE %s CHANGE Name VARCHAR(16) NOT NULL";
+			SQL_ALTER = "ALTER TABLE %s MODIFY Name VARCHAR(16) NOT NULL";
 
 	private String table;
 	private HikariDataSource hikari;
