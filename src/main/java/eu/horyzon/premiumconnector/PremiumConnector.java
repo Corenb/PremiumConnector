@@ -158,6 +158,7 @@ public class PremiumConnector extends Plugin {
 	}
 
 	public void redirect(String name) {
-		getProxy().getPlayer(name).connect(pendingRedirections.remove(name));
+		if (pendingRedirections.containsKey(name) && pendingRedirections.get(name) != null)
+			getProxy().getPlayer(name).connect(pendingRedirections.remove(name));
 	}
 }
