@@ -47,8 +47,8 @@
       <url>https://repo.nukkitx.com/maven-snapshots/</url>
     </repository>
     <repository>
-      <id>Repos-master</id>
-      <url>https://github.com/KarmaConfigs/Repos/raw/master/</url>
+      <id>locklogin-repo</id>
+      <url>https://oss.sonatype.org/content/groups/public/</url>
     </repository>
   </repositories>
 
@@ -95,7 +95,7 @@
     <dependency>
       <groupId>ml.karmaconfigs</groupId>
       <artifactId>LockLogin</artifactId>
-      <version>1.0.5.2</version>
+      <version>1.0.5.3</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
