@@ -10,8 +10,9 @@ import ml.karmaconfigs.lockloginmodules.bungee.ModuleLoader;
 import ml.karmaconfigs.lockloginmodules.shared.NoJarException;
 import ml.karmaconfigs.lockloginmodules.shared.NoPluginException;
 import ml.karmaconfigs.lockloginsystem.bungeecord.api.PlayerAPI;
+import ml.karmaconfigs.lockloginsystem.bungeecord.api.events.PlayerAuthEvent;
 import ml.karmaconfigs.lockloginsystem.bungeecord.api.events.PlayerRegisterEvent;
-import ml.karmaconfigs.lockloginsystem.bungeecord.api.events.PlayerVerifyEvent;
+import ml.karmaconfigs.lockloginsystem.shared.EventAuthResult;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -65,7 +66,7 @@ public class LockLoginListener extends Module implements Listener {
 
 	@Override
 	public @NotNull String version() {
-		return "1.0.0";
+		return "1.1.0";
 	}
 
 	@EventHandler
@@ -76,7 +77,10 @@ public class LockLoginListener extends Module implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerVerify(PlayerVerifyEvent event) {
+	public void onPlayerAuth(PlayerAuthEvent event) {
+		if (event.getAuthResult() != EventAuthResult.SUCCESS)
+			return;
+
 		String name = event.getPlayer().getName();
 		plugin.redirect(name.toLowerCase());
 		plugin.getLogger().fine("Plugin receive login event from LockLogin for player " + name + ".");
