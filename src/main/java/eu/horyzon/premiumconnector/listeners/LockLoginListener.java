@@ -11,6 +11,7 @@ import ml.karmaconfigs.lockloginmodules.bungee.ModuleLoader;
 import ml.karmaconfigs.lockloginmodules.shared.NoJarException;
 import ml.karmaconfigs.lockloginmodules.shared.NoPluginException;
 import ml.karmaconfigs.lockloginsystem.bungeecord.api.PlayerAPI;
+import ml.karmaconfigs.lockloginsystem.bungeecord.api.events.PlayerAuthEvent;
 import ml.karmaconfigs.lockloginsystem.bungeecord.api.events.PlayerRegisterEvent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
@@ -65,7 +66,7 @@ public class LockLoginListener extends Module implements Listener {
 
 	@Override
 	public @NotNull String version() {
-		return "1.0.0";
+		return "1.1.0";
 	}
 
 	@EventHandler
