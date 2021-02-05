@@ -2,7 +2,6 @@ package eu.horyzon.premiumconnector.listeners;
 
 import java.io.IOException;
 
-import ml.karmaconfigs.lockloginsystem.bungeecord.api.events.PlayerAuthEvent;
 import org.jetbrains.annotations.NotNull;
 
 import eu.horyzon.premiumconnector.PremiumConnector;
@@ -80,11 +79,10 @@ public class LockLoginListener extends Module implements Listener {
 	public void onPlayerVerify(PlayerAuthEvent event) {
 		String name = event.getPlayer().getName();
 		switch (event.getAuthResult()) {
-			case SUCCESS:
-			case SUCCESS_TEMP:
-				plugin.redirect(name.toLowerCase());
-				plugin.getLogger().fine("Plugin receive login event from LockLogin for player " + name + ".");
-				break;
+		case SUCCESS:
+		case SUCCESS_TEMP:
+			plugin.redirect(name.toLowerCase());
+			plugin.getLogger().fine("Plugin receive login event from LockLogin for player " + name + ".");
 		}
 	}
 
