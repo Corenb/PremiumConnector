@@ -20,7 +20,9 @@ import eu.horyzon.premiumconnector.listeners.PreLoginListener;
 import eu.horyzon.premiumconnector.listeners.ServerConnectListener;
 import eu.horyzon.premiumconnector.session.PlayerSession;
 import eu.horyzon.premiumconnector.sql.DataSource;
+import net.md_5.bungee.UserConnection;
 import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -159,6 +161,6 @@ public class PremiumConnector extends Plugin {
 
 	public void redirect(String name) {
 		if (pendingRedirections.containsKey(name) && pendingRedirections.get(name) != null)
-			getProxy().getPlayer(name).connect(pendingRedirections.remove(name));
+			((UserConnection) getProxy().getPlayer(name)).connect(pendingRedirections.remove(name), null, true, ServerConnectEvent.Reason.PLUGIN);
 	}
 }
