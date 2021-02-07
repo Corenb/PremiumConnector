@@ -11,6 +11,9 @@ mojanServerError: |-
 rateLimit: |-
   &c       Erreur d'authentification
   &cLe processus d'authentification est actuellement surchargé. Merci de réessayer dans 1 minute.
+wrongEdition: |-
+  &c       Mauvaise édition
+  &cMerci de rejoindre avec votre édition de Minecraft habituelle
 consoleCommand: '%prefix% &cMerci d''utiliser /%cmd% [player]'
 noPermission: '%prefix% &cVous n''avez pas la permission d''executer la commande.'
 noPlayer: '%prefix% &cJoueur %player% inconnu.'

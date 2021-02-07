@@ -6,7 +6,9 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 
 import com.github.games647.craftapi.resolver.MojangResolver;
@@ -20,6 +22,7 @@ import eu.horyzon.premiumconnector.listeners.PreLoginListener;
 import eu.horyzon.premiumconnector.listeners.ServerConnectListener;
 import eu.horyzon.premiumconnector.session.PlayerSession;
 import eu.horyzon.premiumconnector.sql.DataSource;
+import eu.horyzon.premiumconnector.sql.SQLManager;
 import net.md_5.bungee.UserConnection;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ServerConnectEvent;
@@ -32,11 +35,13 @@ public class PremiumConnector extends Plugin {
 	private static PremiumConnector instance;
 	private MojangResolver resolver;
 	private DataSource source;
+	private SQLManager SQLManager;
 	private ServerInfo crackedServer;
-	private boolean floodgate,
-			secondAttempt,
+	private boolean secondAttempt,
 			blockServerSwitch;
 	private int timeCommand;
+
+	private Set<String> geyserProxies = new HashSet<>();
 	private Map<String, ServerInfo> pendingRedirections = new HashMap<>();
 	private Map<String, PlayerSession> playerSession = new HashMap<>();
 
@@ -53,9 +58,7 @@ public class PremiumConnector extends Plugin {
 			getLogger().setLevel(Level.parse(config.getString("debug", "INFO")));
 			getLogger().info("Debug level set to " + getLogger().getLevel());
 
-			floodgate = getProxy().getPluginManager().getPlugin("floodgate") != null;
-			crackedServer = getProxy().getServerInfo(config.getString("authServer"));
-			if (crackedServer == null) {
+			if ( (crackedServer = getProxy().getServerInfo(config.getString("authServer"))) == null) {
 				getLogger().warning("Please provide a correct cracked server name in the configuration file.");
 				return;
 			}
@@ -63,8 +66,7 @@ public class PremiumConnector extends Plugin {
 			secondAttempt = config.getBoolean("secondAttempt", true);
 			blockServerSwitch = config.getBoolean("blockServerSwitch", true);
 			timeCommand = config.getInt("timeToConfirm", 30);
-			// Initialize MojangResolver
-			resolver = new MojangResolver();
+			geyserProxies.addAll(config.getStringList("geyserProxy"));
 
 			// Setup Database
 			Configuration configBackend = config.getSection("backend");
@@ -72,13 +74,19 @@ public class PremiumConnector extends Plugin {
 				source = new DataSource(this, configBackend.getString("driver"), configBackend.getString("host"), configBackend.getInt("port", 3306), configBackend.getString("user"), configBackend.getString("password"), configBackend.getString("database"), configBackend.getString("table"), configBackend.getBoolean("useSSL", true));
 			} catch (RuntimeException | SQLException exception) {
 				if (configBackend.getString("driver").contains("sqlite"))
-					getLogger().warning("Bungeecord don't support SQLite per default.\r\nIf you want to use SQLite, you need to install the driver yourself\r\nEasy way : https://www.spigotmc.org/resources/sqlite-for-bungeecord.57191/\r\nHard way : https://gist.github.com/games647/d2a57abf90f707c0bd1107e432c580f3");
+					getLogger().warning("You select SQLite as backend but Bungeecord don't support it per default.\r\nIf you want to use SQLite, you need to install the driver yourself\r\nEasy way : https://www.spigotmc.org/resources/sqlite-for-bungeecord.57191/\r\nHard way : https://gist.github.com/games647/d2a57abf90f707c0bd1107e432c580f3");
 				else
 					getLogger().warning("Please configure your database informations.");
 
 				exception.printStackTrace();
 				return;
 			}
+
+			// Initialize SQLManager
+			SQLManager = new SQLManager(this, source);
+
+			// Initialize MojangResolver
+			resolver = new MojangResolver();
 
 			Message.setup(loadConfiguration(getDataFolder(), "locales/message_" + config.getString("locale", "en") + ".yml"));
 
@@ -127,6 +135,10 @@ public class PremiumConnector extends Plugin {
 		return source;
 	}
 
+	public SQLManager getSQLManager() {
+		return SQLManager;
+	}
+
 	public MojangResolver getResolver() {
 		return resolver;
 	}
@@ -136,10 +148,10 @@ public class PremiumConnector extends Plugin {
 	}
 
 	public boolean isFloodgate() {
-		return floodgate;
+		return !geyserProxies.isEmpty();
 	}
 
-	public boolean isSecondAttempt() {
+	public boolean allowSecondAttempt() {
 		return secondAttempt;
 	}
 
@@ -162,5 +174,13 @@ public class PremiumConnector extends Plugin {
 	public void redirect(String name) {
 		if (pendingRedirections.containsKey(name) && pendingRedirections.get(name) != null)
 			((UserConnection) getProxy().getPlayer(name)).connect(pendingRedirections.remove(name), null, true, ServerConnectEvent.Reason.PLUGIN);
+	}
+
+	public boolean isFromGeyserProxy(String address) {
+		return geyserProxies.stream().anyMatch((proxy) -> address.matches(proxy));
+	}
+
+	public boolean hasGeyserSupport() {
+		return !geyserProxies.isEmpty();
 	}
 }

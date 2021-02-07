@@ -49,12 +49,12 @@ public class CommandBase extends Command {
 
 	protected void update(CommandSender sender, String playerName, CommandType command) throws SQLException {
 		try {
-			PlayerSession playerSession = PlayerSession.loadFromName(playerName);
+			PlayerSession playerSession = plugin.getSQLManager().loadPlayerSessionFromConnection(playerName);
 			if (command == CommandType.PREMIUM && !playerSession.isPremium() || command == CommandType.CRACKED && playerSession.isPremium()) {
 				playerSession.setPremium(command == CommandType.PREMIUM);
-				playerSession.update();
+				plugin.getSQLManager().update(playerSession);
 			} else if (command == CommandType.RESET)
-				playerSession.delete();
+				plugin.getSQLManager().delete(playerSession);
 			else {
 				(sender.getName().equals(playerName) ? Message.FAIL_COMMAND : Message.FAIL_COMMAND_OTHER).sendMessage(sender, "%player%", playerName, "%status%", command.getStatus().toString());
 				return;

@@ -9,7 +9,6 @@ import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent.Reason;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
-import net.md_5.bungee.event.EventPriority;
 
 public class ServerConnectListener implements Listener {
 	private PremiumConnector plugin;
@@ -18,31 +17,38 @@ public class ServerConnectListener implements Listener {
 		this.plugin = plugin;
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler()
 	public void onServerConnect(ServerConnectEvent event) {
+		// Skip if event was cancelled
 		if (event.isCancelled())
 			return;
 
+		ProxiedPlayer player = event.getPlayer();
+		String name = player.getName();
+
+		// Skip if player is waiting for a redirection (means is connected to the auth server)
 		if (event.getReason() != Reason.JOIN_PROXY) {
-			event.setCancelled(plugin.isBlockServerSwitch() && plugin.getRedirectionRequests().containsKey(event.getPlayer().getName().toLowerCase()));
+			event.setCancelled(plugin.isBlockServerSwitch() && plugin.getRedirectionRequests().containsKey(name.toLowerCase()));
 			return;
 		}
 
-		ProxiedPlayer player = event.getPlayer();
-		String name = player.getName();
-		if (!player.getPendingConnection().isOnlineMode()) {
+		PlayerSession playerSession = plugin.getPlayerSession().get(name);
+
+		if (!playerSession.isPremium() && !playerSession.isBedrock()) {
 			plugin.getRedirectionRequests().put(name.toLowerCase(), event.getTarget());
 			plugin.getLogger().fine("Cracked player " + name + " was redirected on the cracked server " + plugin.getCrackedServer().getName());
 			event.setTarget(plugin.getCrackedServer());
+			return;
 		}
 
 		try {
-			String address = player.getPendingConnection().getSocketAddress().toString();
-			PlayerSession session = plugin.getPlayerSession().remove(name + address.substring(1, address.indexOf(':')));
-			if (session != null)
-				session.update();
-		} catch (SQLException e) {
-			e.printStackTrace();
+			if (playerSession.isSecondAttempt()) {
+				plugin.getSQLManager().update(playerSession);
+				playerSession.setSecondAttempt(false);
+				plugin.getLogger().fine("Player " + name + " confirmed as cracked with second attempt.");
+			}
+		} catch (SQLException exception) {
+			exception.printStackTrace();
 			plugin.getLogger().warning("SQL error on updating player" + name);
 		}
 	}
