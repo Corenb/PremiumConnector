@@ -32,8 +32,8 @@ public class PremiumCheck implements Runnable {
 			PlayerSession playerSession;
 
 			// Check if a PlayerSession is present in cached data
-			if ( (playerSession = plugin.getPlayerSession().get(name + ip)) != null) {
-				if (plugin.allowSecondAttempt()) {
+			if ( (playerSession = plugin.getPlayerSession().get(name)) != null) {
+				if (playerSession.isSecondAttempt()) {
 					playerSession.setPremium(false);
 					plugin.getSQLManager().update(playerSession);
 					plugin.getLogger().fine("Player " + name + " try to connect for the second attempt and has been defined as cracked.");
@@ -57,6 +57,8 @@ public class PremiumCheck implements Runnable {
 							plugin.getLogger().fine("Player " + name + " is connecting with a different version than his last visit.");
 						} else
 							plugin.getPlayerSession().put(name, playerSession);
+					else
+						plugin.getPlayerSession().put(name, playerSession);
 				} catch (NullPointerException exception) {
 					playerSession = new PlayerSession(connection, plugin.hasGeyserSupport() && plugin.isFromGeyserProxy(ip));
 					plugin.getLogger().fine("Creating new PlayerSession from PendingConnection with data Name=" + playerSession.getName() + ", Premium=" + playerSession.isPremium() + (plugin.hasGeyserSupport() ? ", Bedrock=" + playerSession.isBedrock() : ""));
@@ -77,6 +79,8 @@ public class PremiumCheck implements Runnable {
 
 			// Define ProxiedPlayer online or offline
 			connection.setOnlineMode(playerSession.isPremium());
+
+			plugin.getPlayerSession().put(name, playerSession);
 		} catch (RateLimitException exception) {
 			exception.printStackTrace();
 			plugin.getLogger().warning("Rate limit reached when trying to load " + name + " account.");

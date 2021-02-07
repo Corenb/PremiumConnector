@@ -17,6 +17,7 @@ import eu.horyzon.premiumconnector.command.CommandBase;
 import eu.horyzon.premiumconnector.command.CommandType;
 import eu.horyzon.premiumconnector.config.Message;
 import eu.horyzon.premiumconnector.listeners.LockLoginListener;
+import eu.horyzon.premiumconnector.listeners.LoginListener;
 import eu.horyzon.premiumconnector.listeners.MessageChannelListener;
 import eu.horyzon.premiumconnector.listeners.PreLoginListener;
 import eu.horyzon.premiumconnector.listeners.ServerConnectListener;
@@ -94,8 +95,11 @@ public class PremiumConnector extends Plugin {
 			for (CommandType command : CommandType.values())
 				getProxy().getPluginManager().registerCommand(this, new CommandBase(this, command));
 
-			getProxy().getPluginManager().registerListener(this, new PreLoginListener(this));
 			getProxy().getPluginManager().registerListener(this, new ServerConnectListener(this));
+			getProxy().getPluginManager().registerListener(this, new PreLoginListener(this));
+			if (!config.getBoolean("fixUUID", true))
+				getProxy().getPluginManager().registerListener(this, new LoginListener(this));
+
 			if (getProxy().getPluginManager().getPlugin("LockLogin") != null) {
 				getProxy().getPluginManager().registerListener(this, new LockLoginListener(this));
 				getLogger().info("LockLogin hook enabled.");
