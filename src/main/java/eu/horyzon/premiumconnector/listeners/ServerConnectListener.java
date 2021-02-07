@@ -34,22 +34,23 @@ public class ServerConnectListener implements Listener {
 
 		PlayerSession playerSession = plugin.getPlayerSession().get(name);
 
-		if (!playerSession.isPremium() && !playerSession.isBedrock()) {
+		if (playerSession.isPremium()) {
+			String address = player.getPendingConnection().getSocketAddress().toString();
+			String ip = address.substring(1, address.indexOf(':'));
+			if (plugin.getSecondAttempts().remove(name + ip)) {
+				try {
+					plugin.getSQLManager().update(playerSession);
+				} catch (SQLException exception) {
+					exception.printStackTrace();
+					plugin.getLogger().warning("SQL error on updating player" + name);
+				}
+
+				plugin.getLogger().fine("Player " + name + " confirmed as premium player.");
+			}
+		} else if (!playerSession.isBedrock()) {
 			plugin.getRedirectionRequests().put(name.toLowerCase(), event.getTarget());
 			plugin.getLogger().fine("Cracked player " + name + " was redirected on the cracked server " + plugin.getCrackedServer().getName());
 			event.setTarget(plugin.getCrackedServer());
-			return;
-		}
-
-		try {
-			if (playerSession.isSecondAttempt()) {
-				plugin.getSQLManager().update(playerSession);
-				playerSession.setSecondAttempt(false);
-				plugin.getLogger().fine("Player " + name + " confirmed as cracked with second attempt.");
-			}
-		} catch (SQLException exception) {
-			exception.printStackTrace();
-			plugin.getLogger().warning("SQL error on updating player" + name);
 		}
 	}
 }

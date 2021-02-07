@@ -42,7 +42,8 @@ public class PremiumConnector extends Plugin {
 			blockServerSwitch;
 	private int timeCommand;
 
-	private Set<String> geyserProxies = new HashSet<>();
+	private Set<String> geyserProxies = new HashSet<>(),
+			secondAttempts = new HashSet<>();
 	private Map<String, ServerInfo> pendingRedirections = new HashMap<>();
 	private Map<String, PlayerSession> playerSession = new HashMap<>();
 
@@ -165,6 +166,10 @@ public class PremiumConnector extends Plugin {
 
 	public int getTimeCommand() {
 		return timeCommand;
+	}
+
+	public Set<String> getSecondAttempts() {
+		return secondAttempts;
 	}
 
 	public Map<String, ServerInfo> getRedirectionRequests() {

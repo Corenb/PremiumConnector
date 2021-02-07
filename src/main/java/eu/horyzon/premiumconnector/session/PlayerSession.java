@@ -6,8 +6,7 @@ import net.md_5.bungee.api.connection.PendingConnection;
 
 public class PlayerSession {
 	protected final String name;
-	protected boolean premium,
-			secondAttempt = false;
+	protected boolean premium;
 	protected Boolean bedrock;
 
 	public PlayerSession(String name, boolean premium, Boolean bedrock) {
@@ -30,14 +29,6 @@ public class PlayerSession {
 
 	public boolean isPremium() {
 		return premium;
-	}
-
-	public void setSecondAttempt(boolean secondAttempt) {
-		this.secondAttempt = secondAttempt;
-	}
-
-	public boolean isSecondAttempt() {
-		return secondAttempt;
 	}
 
 	public void setBedrock(boolean bedrock) {
