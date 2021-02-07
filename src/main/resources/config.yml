@@ -37,3 +37,6 @@ blockServerSwitch: true
 
 # Time to confirm /premium command
 timeToConfirm: 30
+
+# Use it with precaution ! All players connecting from this address won't need authentification. Use this to register your Geyser proxy addresses such as 127.0.0.1 or 172.18.0.* (You can use wildcard matching).
+geyserProxy: []

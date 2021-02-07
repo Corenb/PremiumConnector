@@ -44,19 +44,23 @@ public class DataSource {
 
 		hikari = new HikariDataSource(config);
 
-		initDatabase();
+		initDatabase(plugin.hasGeyserSupport());
 	}
 
 	public Connection getConnection() throws SQLException {
 		return hikari.getConnection();
 	}
 
-	private void initDatabase() throws SQLException {
+	private void initDatabase(boolean bedrockSupport) throws SQLException {
 		try (Connection connection = getConnection(); Statement createStmt = connection.createStatement()) {
 			connection.setAutoCommit(false);
 
 			createStmt.addBatch(String.format(SQL_CREATE, table));
 			createStmt.addBatch(String.format(SQL_ALTER, table));
+			if (bedrockSupport) {
+				createStmt.addBatch("ALTER TABLE " + table + " ADD IF NOT EXISTS Bedrock BOOLEAN;");
+				createStmt.addBatch("ALTER TABLE " + table + " CHANGE Bedrock Bedrock BOOLEAN NULL DEFAULT 0;");
+			}
 
 			createStmt.executeBatch();
 		}

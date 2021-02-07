@@ -11,6 +11,9 @@ mojanServerError: |-
 rateLimit: |-
   &c       Authentification overload
   &cAuthentificate process is currently overload. Please retry in one minute
+wrongEdition: |-
+  &c       Wrong edition
+  &cPlease join with your right Minecraft edition
 consoleCommand: '%prefix% &cPlease use /%cmd% [player]'
 noPermission: '%prefix% &cYou don''t have the permission to do this.'
 noPlayer: '%prefix% &cPlayer %player% not found.'
