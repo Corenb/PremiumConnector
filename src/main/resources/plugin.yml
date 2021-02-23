@@ -2,4 +2,4 @@ name: PremiumConnector
 version: 2.3.2
 author: [LLIcocoman_Hrz]
 main: eu.horyzon.premiumconnector.PremiumConnector
-softDepends: [LockLogin]
+softDepends: [LockLogin, MultiLobby]

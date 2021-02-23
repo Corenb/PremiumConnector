@@ -4,7 +4,7 @@ debug: INFO
 # Language (en, fr)
 locale: en
 
-# Server name on which cracked players are redirected for register/login them.
+# Server name or MultiLobby group name on which cracked players are redirected for register/login them.
 authServer: crack
 
 # Backend Configuration

@@ -70,19 +70,20 @@ public class LockLoginListener extends Module implements Listener {
 
 	@EventHandler
 	public void onPlayerRegister(PlayerRegisterEvent event) {
-		String name = event.getPlayer().getName();
-		plugin.redirect(name.toLowerCase());
-		plugin.getLogger().fine("Plugin receive register event from LockLogin for player " + name + ".");
+		ProxiedPlayer player = event.getPlayer();
+		plugin.getRedirectManager().redirect(player);
+		plugin.getLogger().fine("Plugin receive register event from LockLogin for player " + player.getName() + ".");
 	}
 
 	@EventHandler
 	public void onPlayerVerify(PlayerAuthEvent event) {
-		String name = event.getPlayer().getName();
 		switch (event.getAuthResult()) {
 		case SUCCESS:
 		case SUCCESS_TEMP:
-			plugin.redirect(name.toLowerCase());
-			plugin.getLogger().fine("Plugin receive login event from LockLogin for player " + name + ".");
+			ProxiedPlayer player = event.getPlayer();
+
+			plugin.getRedirectManager().redirect(player);
+			plugin.getLogger().fine("Plugin receive login event from LockLogin for player " + player.getName() + ".");
 		}
 	}
 

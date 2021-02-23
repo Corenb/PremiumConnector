@@ -44,7 +44,7 @@ public class SQLManager {
 		try (Connection connection = source.getConnection(); Statement createStmt = connection.createStatement()) {
 			String statement = String.format(SQLUpdate, source.getTable(), playerSession.getName(), playerSession.isPremium(), playerSession.isBedrock());
 
-			plugin.getLogger().info("Executing SQL update '" + statement + "'");
+			plugin.getLogger().fine("Executing SQL update '" + statement + "'");
 			createStmt.executeUpdate(statement);
 		}
 	}
@@ -53,7 +53,7 @@ public class SQLManager {
 		try (Connection connection = source.getConnection(); Statement createStmt = connection.createStatement()) {
 			String statement = String.format(SQLDelete, source.getTable(), playerSession.getName());
 
-			plugin.getLogger().info("Executing SQL update '" + statement + "'");
+			plugin.getLogger().fine("Executing SQL update '" + statement + "'");
 			createStmt.executeUpdate(statement);
 		}
 	}
