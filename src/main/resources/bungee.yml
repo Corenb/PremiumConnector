@@ -1,0 +1,6 @@
+name: ${project.name}
+main: ${project.groupId}.${project.artifactId}.${project.name}
+version: ${project.version}
+description: ${project.description}
+author: LLIcocoman_Hrz
+depends: [AuthMeBungee]
