@@ -88,13 +88,12 @@
     <dependency>
       <groupId>com.github.games647</groupId>
       <artifactId>craftapi</artifactId>
-      <version>0.2</version>
+      <version>0.5-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>ml.karmaconfigs</groupId>
-      <artifactId>LockLogin</artifactId>
-      <version>1.0.5.3</version>
-      <scope>provided</scope>
+      <groupId>eu.locklogin</groupId>
+      <artifactId>LockLogin-API</artifactId>
+      <version>1.13.14</version>
     </dependency>
   </dependencies>
 </project>
