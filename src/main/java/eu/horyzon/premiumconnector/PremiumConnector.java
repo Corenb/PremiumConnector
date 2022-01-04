@@ -16,7 +16,6 @@ import com.github.games647.craftapi.resolver.MojangResolver;
 import eu.horyzon.premiumconnector.command.CommandBase;
 import eu.horyzon.premiumconnector.command.CommandType;
 import eu.horyzon.premiumconnector.config.Message;
-import eu.horyzon.premiumconnector.listeners.LockLoginListener;
 import eu.horyzon.premiumconnector.listeners.LoginListener;
 import eu.horyzon.premiumconnector.listeners.MessageChannelListener;
 import eu.horyzon.premiumconnector.listeners.PreLoginListener;
@@ -101,13 +100,8 @@ public class PremiumConnector extends Plugin {
 			if (!config.getBoolean("fixUUID", true))
 				getProxy().getPluginManager().registerListener(this, new LoginListener(this));
 
-			if (getProxy().getPluginManager().getPlugin("LockLogin") != null) {
-				getProxy().getPluginManager().registerListener(this, new LockLoginListener(this));
-				getLogger().info("LockLogin hook enabled.");
-			} else {
-				getProxy().getPluginManager().registerListener(this, new MessageChannelListener(this));
-				getLogger().info("AuthMe hook enabled.");
-			}
+			getProxy().getPluginManager().registerListener(this, new MessageChannelListener(this));
+			getLogger().info("AuthMe hook enabled.");
 		} catch (IOException exception) {
 			exception.printStackTrace();
 			getLogger().warning("Error on loading configuration file...");
