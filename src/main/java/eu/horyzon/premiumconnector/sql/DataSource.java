@@ -10,8 +10,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import eu.horyzon.premiumconnector.PremiumConnector;
 
 public class DataSource {
-	private static String SQL_CREATE = "CREATE TABLE IF NOT EXISTS %s (Name VARCHAR(16) NOT NULL, Premium BOOLEAN, PRIMARY KEY (Name));",
-			SQL_ALTER = "ALTER TABLE %s MODIFY Name VARCHAR(16) NOT NULL";
+	private static String SQL_CREATE = "CREATE TABLE IF NOT EXISTS %s (Name VARCHAR(16) NOT NULL, Premium BOOLEAN, PRIMARY KEY (Name));";
 
 	private String table;
 	private HikariDataSource hikari;
@@ -56,7 +55,6 @@ public class DataSource {
 			connection.setAutoCommit(false);
 
 			createStmt.addBatch(String.format(SQL_CREATE, table));
-			createStmt.addBatch(String.format(SQL_ALTER, table));
 			if (bedrockSupport) {
 				createStmt.addBatch("ALTER TABLE " + table + " ADD IF NOT EXISTS Bedrock BOOLEAN;");
 				createStmt.addBatch("ALTER TABLE " + table + " CHANGE Bedrock Bedrock BOOLEAN NULL DEFAULT 0;");
