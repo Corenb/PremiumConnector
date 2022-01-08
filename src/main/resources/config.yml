@@ -9,11 +9,11 @@ authServer: crack
 
 # Backend Configuration
 backend:
-  # Driver for SQLite (org.sqlite.JDBC), MySQL (com.mysql.jdbc.Driver) or MariaDB (org.mariadb.jdbc.Driver)
+  # Driver for SQLite (org.sqlite.JDBC), MySQL (com.mysql.cj.jdbc.Driver) or MariaDB (org.mariadb.jdbc.Driver)
   # If you want to use SQLite, you need to install the driver yourself
   # Easy way : https://www.spigotmc.org/resources/sqlite-for-bungeecord.57191/
   # Hard way : https://gist.github.com/games647/d2a57abf90f707c0bd1107e432c580f3
-  driver: 'com.mysql.jdbc.Driver'
+  driver: 'com.mysql.cj.jdbc.Driver'
   # Database host address
   host: '127.0.0.1'
   # Database port
