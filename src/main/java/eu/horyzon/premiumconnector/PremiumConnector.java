@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -22,7 +21,9 @@ import eu.horyzon.premiumconnector.listeners.PreLoginListener;
 import eu.horyzon.premiumconnector.listeners.ServerConnectListener;
 import eu.horyzon.premiumconnector.session.PlayerSession;
 import eu.horyzon.premiumconnector.sql.DataSource;
+import eu.horyzon.premiumconnector.sql.MySQLDataSource;
 import eu.horyzon.premiumconnector.sql.SQLManager;
+import eu.horyzon.premiumconnector.sql.SQLiteDataSource;
 import net.md_5.bungee.UserConnection;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ServerConnectEvent;
@@ -57,7 +58,7 @@ public class PremiumConnector extends Plugin {
 			Configuration config = loadConfiguration(getDataFolder(), "config.yml");
 
 			getLogger().setLevel(Level.parse(config.getString("debug", "INFO")));
-			getLogger().info("Debug level set to " + getLogger().getLevel());
+			getLogger().info("Debug level: " + getLogger().getLevel());
 
 			if ( (crackedServer = getProxy().getServerInfo(config.getString("authServer"))) == null) {
 				getLogger().warning("Please provide a correct cracked server name in the configuration file.");
@@ -72,13 +73,8 @@ public class PremiumConnector extends Plugin {
 			// Setup Database
 			Configuration configBackend = config.getSection("backend");
 			try {
-				source = new DataSource(this, configBackend.getString("driver"), configBackend.getString("host"), configBackend.getInt("port", 3306), configBackend.getString("user"), configBackend.getString("password"), configBackend.getString("database"), configBackend.getString("table"), configBackend.getBoolean("useSSL", true));
-			} catch (RuntimeException | SQLException exception) {
-				if (configBackend.getString("driver").contains("sqlite"))
-					getLogger().warning("You select SQLite as backend but Bungeecord don't support it per default.\r\nIf you want to use SQLite, you need to install the driver yourself\r\nEasy way : https://www.spigotmc.org/resources/sqlite-for-bungeecord.57191/\r\nHard way : https://gist.github.com/games647/d2a57abf90f707c0bd1107e432c580f3");
-				else
-					getLogger().warning("Please configure your database informations.");
-
+				source = configBackend.getString("driver").contains("sqlite") ? new SQLiteDataSource(this, configBackend) : new MySQLDataSource(this, configBackend);
+			} catch (Exception exception) {
 				exception.printStackTrace();
 				return;
 			}
@@ -91,7 +87,7 @@ public class PremiumConnector extends Plugin {
 
 			Message.setup(loadConfiguration(getDataFolder(), "locales/message_" + config.getString("locale", "en") + ".yml"));
 
-			// INITIATE COMMANDS
+			// Initialize Commands
 			for (CommandType command : CommandType.values())
 				getProxy().getPluginManager().registerCommand(this, new CommandBase(this, command));
 
@@ -103,9 +99,14 @@ public class PremiumConnector extends Plugin {
 			getProxy().getPluginManager().registerListener(this, new MessageChannelListener(this));
 			getLogger().info("AuthMe hook enabled.");
 		} catch (IOException exception) {
-			exception.printStackTrace();
 			getLogger().warning("Error on loading configuration file...");
+			exception.printStackTrace();
 		}
+	}
+
+	@Override
+	public void onDisable() {
+		source.closeConnection();
 	}
 
 	private Configuration loadConfiguration(File directory, String fileName) throws IOException {
