@@ -19,7 +19,7 @@ public abstract class DataSource {
 		this.plugin = plugin;
 		table = configBackend.getString("table");
 		hikariSource = new HikariDataSource();
-		
+
         try {
 			configure(configBackend);
         } catch (RuntimeException exception) {
@@ -34,7 +34,7 @@ public abstract class DataSource {
         try {
             initDatabase(plugin.hasGeyserSupport());
 			plugin.getLogger().info("SQL initialization success");
-        } catch (Exception exception) {
+        } catch (SQLException exception) {
             plugin.getLogger().warning("Error during SQlite initialization. Please check your database informations.");
 			throw exception;
         }
