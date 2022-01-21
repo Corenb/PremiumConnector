@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.zaxxer.hikari.HikariConfig;
-
 import eu.horyzon.premiumconnector.PremiumConnector;
 import net.md_5.bungee.config.Configuration;
 
@@ -16,17 +14,15 @@ public class SQLiteDataSource extends DataSource {
         super(plugin, configBackend);
     }
 
-    protected HikariConfig configure(Configuration configBackend) {
-		HikariConfig config = new HikariConfig();
+    protected void configure(Configuration configBackend) throws RuntimeException {
+		String driverClass = configBackend.getString("driver");
 
-		config.setPoolName("PremiumConnectorSQLitePool");
-		config.setDriverClassName(configBackend.getString("driver"));
-		config.setJdbcUrl("jdbc:sqlite://" + plugin.getDataFolder().getAbsolutePath().toString() + "/" + configBackend.getString("database").replace("{pluginDir}", plugin.getDataFolder().getAbsolutePath().toString()) + ".db");
-		config.setConnectionTestQuery("SELECT 1");
-		config.setMaxLifetime(60000); // 60 Sec
-		config.setMaximumPoolSize(50); // 50 Connections (including idle connections)
-
-		return config;
+		hikariSource.setPoolName("PremiumConnectorSQLitePool");
+		hikariSource.setDriverClassName(driverClass);
+		hikariSource.setJdbcUrl("jdbc:sqlite://" + plugin.getDataFolder().getAbsolutePath().toString() + "/" + configBackend.getString("database").replace("{pluginDir}", plugin.getDataFolder().getAbsolutePath().toString()) + ".db");
+		hikariSource.setConnectionTestQuery("SELECT 1");
+		hikariSource.setMaxLifetime(60000); // 60 Sec
+		hikariSource.setMaximumPoolSize(50); // 50 Connections (including idle connections)
     }
 
 	protected void connect() throws Exception {

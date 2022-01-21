@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.zaxxer.hikari.HikariConfig;
-
 import eu.horyzon.premiumconnector.PremiumConnector;
 import net.md_5.bungee.config.Configuration;
 
@@ -17,22 +15,18 @@ public class MySQLDataSource extends DataSource {
 	}
 
 	@Override
-	protected HikariConfig configure(Configuration configBackend) {
-		HikariConfig config = new HikariConfig();
-		config.setDriverClassName(configBackend.getString("driver"));
+	protected void configure(Configuration configBackend) throws RuntimeException {
+		String driverClass = configBackend.getString("driver");
+		String jdbcUrl = "jdbc:" + (driverClass.contains("mariadb") ? "mariadb" : "mysql") + "://" + configBackend.getString("host") + ':' + configBackend.getInt("port", 3306) + '/' + configBackend.getString("database");
 
-		String jdbcUrl = "jdbc:" + (config.getDriverClassName().contains("mariadb") ? "mariadb" : "mysql") + "://" + configBackend.getString("host") + ':' + configBackend.getInt("port", 3306) + '/' + configBackend.getString("database");
-		plugin.getLogger().fine("Configuring jdbc url to " + jdbcUrl);
-
-		config.setJdbcUrl(jdbcUrl);
-		config.setUsername(configBackend.getString("user"));
-		config.setPassword(configBackend.getString("password"));
-		config.addDataSourceProperty("useSSL", configBackend.getBoolean("useSSL", true));
-		config.addDataSourceProperty("cachePrepStmts", "true");
-		config.addDataSourceProperty("prepStmtCacheSize", "250");
-		config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-
-		return config;
+		hikariSource.setDriverClassName(driverClass);
+		hikariSource.setJdbcUrl(jdbcUrl);
+		hikariSource.setUsername(configBackend.getString("user"));
+		hikariSource.setPassword(configBackend.getString("password"));
+		hikariSource.addDataSourceProperty("useSSL", configBackend.getBoolean("useSSL", true));
+		hikariSource.addDataSourceProperty("cachePrepStmts", "true");
+		hikariSource.addDataSourceProperty("prepStmtCacheSize", "250");
+		hikariSource.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 	}
 
 	protected void initDatabase(boolean bedrockSupport) throws SQLException {
