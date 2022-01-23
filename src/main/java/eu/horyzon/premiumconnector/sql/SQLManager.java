@@ -41,11 +41,11 @@ public class SQLManager {
 	}
 
 	public void update(PlayerSession playerSession) throws SQLException {
-		try (Connection connection = source.getConnection()) {
+		try (Connection connection = source.getConnection(); Statement createStmt = connection.createStatement()) {
 			String statement = String.format(SQLUpdate, source.getTable(), playerSession.getName(), playerSession.isPremium(), playerSession.isBedrock());
 
 			plugin.getLogger().fine("Executing SQL update '" + statement + "'");
-			connection.prepareStatement(statement).executeUpdate();
+			createStmt.executeUpdate(statement);
 		}
 	}
 

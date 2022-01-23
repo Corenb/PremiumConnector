@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -19,14 +17,16 @@ import eu.horyzon.premiumconnector.listeners.LoginListener;
 import eu.horyzon.premiumconnector.listeners.MessageChannelListener;
 import eu.horyzon.premiumconnector.listeners.PreLoginListener;
 import eu.horyzon.premiumconnector.listeners.ServerConnectListener;
-import eu.horyzon.premiumconnector.session.PlayerSession;
+import eu.horyzon.premiumconnector.manager.RedirectManager;
+import eu.horyzon.premiumconnector.redirect.AuthRedirect;
+import eu.horyzon.premiumconnector.redirect.MultiLobbyRedirect;
+import eu.horyzon.premiumconnector.redirect.ServerRedirect;
+import eu.horyzon.premiumconnector.session.PlayerSessionManager;
 import eu.horyzon.premiumconnector.sql.DataSource;
 import eu.horyzon.premiumconnector.sql.MySQLDataSource;
 import eu.horyzon.premiumconnector.sql.SQLManager;
 import eu.horyzon.premiumconnector.sql.SQLiteDataSource;
-import net.md_5.bungee.UserConnection;
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -34,18 +34,19 @@ import net.md_5.bungee.config.YamlConfiguration;
 
 public class PremiumConnector extends Plugin {
 	private static PremiumConnector instance;
+
+	private Configuration config;
 	private MojangResolver resolver;
 	private DataSource source;
 	private SQLManager SQLManager;
-	private ServerInfo crackedServer;
 	private boolean secondAttempt,
 			blockServerSwitch;
-	private int timeCommand;
 
 	private Set<String> geyserProxies = new HashSet<>(),
 			secondAttempts = new HashSet<>();
-	private Map<String, ServerInfo> pendingRedirections = new HashMap<>();
-	private Map<String, PlayerSession> playerSession = new HashMap<>();
+
+	private RedirectManager redirectManager;
+	private PlayerSessionManager playerSessionManager;
 
 	@Override
 	public void onEnable() {
@@ -55,41 +56,29 @@ public class PremiumConnector extends Plugin {
 			getDataFolder().mkdir();
 
 		try {
-			Configuration config = loadConfiguration(getDataFolder(), "config.yml");
+			setupConfiguration();
+			setupDatabase();
+			setupMessages();
+			setupCommands();
 
-			getLogger().setLevel(Level.parse(config.getString("debug", "INFO")));
-			getLogger().info("Debug level: " + getLogger().getLevel());
-
-			if ( (crackedServer = getProxy().getServerInfo(config.getString("authServer"))) == null) {
-				getLogger().warning("Please provide a correct cracked server name in the configuration file.");
-				return;
+			// Initialize AuthRedirect
+			AuthRedirect authRedirect;
+			MultiLobbyRedirect multiLobby = new MultiLobbyRedirect(this);
+			if (multiLobby.isEnabled())
+				authRedirect = multiLobby;
+			else {
+				ServerInfo crackedServer = getProxy().getServerInfo(config.getString("authServer"));
+				if (crackedServer != null)
+					authRedirect = new ServerRedirect(crackedServer);
+				else
+					throw new Exception("Please provide a correct cracked server name in the configuration file.");
 			}
 
-			secondAttempt = config.getBoolean("secondAttempt", true);
-			blockServerSwitch = config.getBoolean("blockServerSwitch", true);
-			timeCommand = config.getInt("timeToConfirm", 30);
-			geyserProxies.addAll(config.getStringList("geyserProxy"));
-
-			// Setup Database
-			Configuration configBackend = config.getSection("backend");
-			try {
-				source = configBackend.getString("driver").contains("sqlite") ? new SQLiteDataSource(this, configBackend) : new MySQLDataSource(this, configBackend);
-			} catch (Exception exception) {
-				exception.printStackTrace();
-				return;
-			}
-
-			// Initialize SQLManager
-			SQLManager = new SQLManager(this, source);
+			redirectManager = new RedirectManager(this, authRedirect);
+			playerSessionManager = new PlayerSessionManager();
 
 			// Initialize MojangResolver
 			resolver = new MojangResolver();
-
-			Message.setup(loadConfiguration(getDataFolder(), "locales/message_" + config.getString("locale", "en") + ".yml"));
-
-			// Initialize Commands
-			for (CommandType command : CommandType.values())
-				getProxy().getPluginManager().registerCommand(this, new CommandBase(this, command));
 
 			getProxy().getPluginManager().registerListener(this, new ServerConnectListener(this));
 			getProxy().getPluginManager().registerListener(this, new PreLoginListener(this));
@@ -100,8 +89,48 @@ public class PremiumConnector extends Plugin {
 			getLogger().info("AuthMe hook enabled.");
 		} catch (IOException exception) {
 			getLogger().warning("Error on loading configuration file...");
+		} catch (Exception exception) {
 			exception.printStackTrace();
+			getLogger().warning("Error on loading plugin...");
 		}
+	}
+
+	private void setupConfiguration() throws IOException {
+		config = loadConfiguration(getDataFolder(), "config.yml");
+
+		getLogger().setLevel(Level.parse(config.getString("debug", "INFO")));
+		getLogger().info("Debug level set to " + getLogger().getLevel());
+
+		secondAttempt = config.getBoolean("secondAttempt", true);
+		blockServerSwitch = config.getBoolean("blockServerSwitch", true);
+		geyserProxies.addAll(config.getStringList("geyserProxy"));
+	}
+
+	private void setupDatabase() throws Exception {
+		Configuration configBackend = config.getSection("backend");
+		try {
+			source = configBackend.getString("driver").contains("sqlite") ? new SQLiteDataSource(this, configBackend) : new MySQLDataSource(this, configBackend);
+		} catch (Exception exception) {
+			throw exception;
+		}
+
+		SQLManager = new SQLManager(this, source);
+	}
+
+	private void setupMessages() throws IOException {
+		Configuration messageConfiguration;
+		try {
+			messageConfiguration = loadConfiguration(getDataFolder(), "locales/message_" + config.getString("locale", "en") + ".yml");
+		} catch (NullPointerException exception) {
+			messageConfiguration = loadConfiguration(getDataFolder(), "locales/message_en.yml");
+		}
+
+		Message.setup(messageConfiguration);
+	}
+
+	private void setupCommands() {
+		for (CommandType command : CommandType.values())
+			getProxy().getPluginManager().registerCommand(this, new CommandBase(this, command));
 	}
 
 	@Override
@@ -117,10 +146,6 @@ public class PremiumConnector extends Plugin {
 
 			try (InputStream in = getResourceAsStream(fileName)) {
 				Files.copy(in, file.toPath());
-			} catch (NullPointerException exception) {
-				return loadConfiguration(directory, "message_en.yml");
-			} catch (IOException exception) {
-				exception.printStackTrace();
 			}
 		}
 
@@ -131,6 +156,10 @@ public class PremiumConnector extends Plugin {
 		return instance;
 	}
 
+	public Configuration getConfig() {
+		return config;
+	}
+
 	public DataSource getDataSource() {
 		return source;
 	}
@@ -139,12 +168,16 @@ public class PremiumConnector extends Plugin {
 		return SQLManager;
 	}
 
-	public MojangResolver getResolver() {
-		return resolver;
+	public RedirectManager getRedirectManager() {
+		return redirectManager;
 	}
 
-	public ServerInfo getCrackedServer() {
-		return crackedServer;
+	public PlayerSessionManager getPlayerSessionManager() {
+		return playerSessionManager;
+	}
+
+	public MojangResolver getResolver() {
+		return resolver;
 	}
 
 	public boolean isFloodgate() {
@@ -159,25 +192,8 @@ public class PremiumConnector extends Plugin {
 		return blockServerSwitch;
 	}
 
-	public int getTimeCommand() {
-		return timeCommand;
-	}
-
 	public Set<String> getSecondAttempts() {
 		return secondAttempts;
-	}
-
-	public Map<String, ServerInfo> getRedirectionRequests() {
-		return pendingRedirections;
-	}
-
-	public Map<String, PlayerSession> getPlayerSession() {
-		return playerSession;
-	}
-
-	public void redirect(String name) {
-		if (pendingRedirections.containsKey(name) && pendingRedirections.get(name) != null)
-			((UserConnection) getProxy().getPlayer(name)).connect(pendingRedirections.remove(name), null, true, ServerConnectEvent.Reason.PLUGIN);
 	}
 
 	public boolean isFromGeyserProxy(String address) {

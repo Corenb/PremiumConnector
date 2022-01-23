@@ -52,7 +52,8 @@ public class MessageChannelListener implements Listener {
 		switch (type) {
 		case "login":
 			String name = dataIn.readUTF();
-			plugin.redirect(name);
+			plugin.getRedirectManager().redirect(name);
+
 			plugin.getLogger().fine("Plugin receive login message from AuthMe for player " + name + ".");
 		}
 	}

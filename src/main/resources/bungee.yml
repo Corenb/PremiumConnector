@@ -4,4 +4,4 @@ version: ${project.version}
 description: ${project.description}
 author: LLIcocoman_Hrz
 depends: [AuthMeBungee]
-softDepends: [SQLiteBungeecord]
+softDepends: [SQLiteBungeecord, MultiLobby]

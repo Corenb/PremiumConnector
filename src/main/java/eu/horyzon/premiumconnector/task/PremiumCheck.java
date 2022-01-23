@@ -33,7 +33,7 @@ public class PremiumCheck implements Runnable {
 			PlayerSession playerSession;
 
 			// Check if a PlayerSession is present in cached data
-			if ( (playerSession = plugin.getPlayerSession().get(name)) != null) {
+			if ( (playerSession = plugin.getPlayerSessionManager().getSession(name)) != null) {
 				// Check if PlayerSession is defined as premium and is the second attempt connection
 				if (playerSession.isPremium() && plugin.getSecondAttempts().remove(name + ip))
 					// Check if the plugin allow second attempt
@@ -87,7 +87,7 @@ public class PremiumCheck implements Runnable {
 						plugin.getSQLManager().update(playerSession);
 				}
 
-				plugin.getPlayerSession().put(name, playerSession);
+				plugin.getPlayerSessionManager().addSession(playerSession);
 			}
 
 			// Define ProxiedPlayer online or offline

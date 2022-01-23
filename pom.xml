@@ -130,5 +130,12 @@
       <artifactId>craftapi</artifactId>
       <version>0.5-SNAPSHOT</version>
     </dependency>
+    <dependency>
+      <groupId>cz.gameteam</groupId>
+      <artifactId>MultiLobby</artifactId>
+      <version>1.0</version>
+      <type>jar</type>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 </project>

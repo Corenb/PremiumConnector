@@ -15,12 +15,14 @@ import net.md_5.bungee.api.plugin.Command;
 public class CommandBase extends Command {
 	private final PremiumConnector plugin;
 	private final CommandType command;
+	private final int cooldown;
 	private final Map<UUID, Long> confirm = new HashMap<>();
 
 	public CommandBase(PremiumConnector plugin, CommandType command) {
 		super(command.getCommandName(), command.getPermission(), command.getAliases());
 		this.plugin = plugin;
 		this.command = command;
+		cooldown = plugin.getConfig().getInt("timeToConfirm", 30);
 	}
 
 	@Override
@@ -70,6 +72,6 @@ public class CommandBase extends Command {
 	}
 
 	private boolean canConfirm(Long time) {
-		return time == null ? false : System.currentTimeMillis() - time < plugin.getTimeCommand() * 1000;
+		return time == null ? false : System.currentTimeMillis() - time < cooldown * 1000;
 	}
 }

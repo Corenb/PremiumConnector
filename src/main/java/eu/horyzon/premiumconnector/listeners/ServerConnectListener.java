@@ -28,11 +28,11 @@ public class ServerConnectListener implements Listener {
 
 		// Skip if player is waiting for a redirection (means is connected to the auth server)
 		if (event.getReason() != Reason.JOIN_PROXY) {
-			event.setCancelled(plugin.isBlockServerSwitch() && plugin.getRedirectionRequests().containsKey(name.toLowerCase()));
+			event.setCancelled(plugin.isBlockServerSwitch() && plugin.getRedirectManager().isRedirectionWaiting(name));
 			return;
 		}
 
-		PlayerSession playerSession = plugin.getPlayerSession().get(name);
+		PlayerSession playerSession = plugin.getPlayerSessionManager().getSession(name);
 
 		if (playerSession.isPremium()) {
 			String address = player.getPendingConnection().getSocketAddress().toString();
@@ -47,10 +47,7 @@ public class ServerConnectListener implements Listener {
 
 				plugin.getLogger().fine("Player " + name + " confirmed as premium player.");
 			}
-		} else if (!playerSession.isBedrock()) {
-			plugin.getRedirectionRequests().put(name.toLowerCase(), event.getTarget());
-			plugin.getLogger().fine("Cracked player " + name + " was redirected on the cracked server " + plugin.getCrackedServer().getName());
-			event.setTarget(plugin.getCrackedServer());
-		}
+		} else if (!playerSession.isBedrock())
+			plugin.getRedirectManager().sendToAuth(player, event.getTarget());
 	}
 }
