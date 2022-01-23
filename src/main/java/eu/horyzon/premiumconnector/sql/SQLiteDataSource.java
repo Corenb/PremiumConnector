@@ -1,6 +1,8 @@
 package eu.horyzon.premiumconnector.sql;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -41,11 +43,20 @@ public class SQLiteDataSource extends DataSource {
 
 			statement.addBatch(String.format(SQL_CREATE, table));
 			if (floodgate) {
-				statement.addBatch(String.format(SQL_ALTER, table));
+				DatabaseMetaData md = connection.getMetaData();
+
+				if (isColumnMissing(md, "Bedrock"))
+					statement.addBatch(String.format(SQL_ALTER, table));
 			}
 
 			statement.executeBatch();
 			connection.commit();
 		}
 	}
+
+    private boolean isColumnMissing(DatabaseMetaData metaData, String columnName) throws SQLException {
+        try (ResultSet resultSet = metaData.getColumns(null, null, table, columnName)) {
+            return !resultSet.next();
+        }
+    }
 }
