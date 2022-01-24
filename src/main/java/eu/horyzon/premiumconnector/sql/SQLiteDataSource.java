@@ -43,10 +43,10 @@ public class SQLiteDataSource extends DataSource {
 
 			statement.addBatch(String.format(SQL_CREATE, table));
 			if (floodgate) {
-				DatabaseMetaData md = connection.getMetaData();
+				DatabaseMetaData metaData = connection.getMetaData();
 
-				if (isColumnMissing(md, "Bedrock"))
-					statement.addBatch(String.format(SQL_ALTER, table, Columns.NAME.getName()));
+				if (isColumnMissing(metaData, "Bedrock"))
+					statement.addBatch(String.format(SQL_ALTER, table, Columns.BEDROCK.getName()));
 			}
 
 			statement.executeBatch();
