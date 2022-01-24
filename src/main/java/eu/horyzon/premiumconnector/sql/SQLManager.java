@@ -19,7 +19,7 @@ public class SQLManager {
 		this.plugin = plugin;
 		this.source = source;
 
-		SQLSelect = "SELECT " + Columns.NAME.getName() + (plugin.hasGeyserSupport() ? ", " + Columns.BEDROCK.getName() : "") + " FROM %s WHERE " + Columns.NAME.getName() + "='%s';";
+		SQLSelect = "SELECT " + Columns.PREMIUM.getName() + (plugin.hasGeyserSupport() ? ", " + Columns.BEDROCK.getName() : "") + " FROM %s WHERE " + Columns.NAME.getName() + "='%s';";
 		SQLUpdate = "INSERT INTO %s(" + Columns.NAME.getName() + ", " + Columns.PREMIUM.getName() + (plugin.hasGeyserSupport() ? ", Bedrock" : "") + ") VALUES('%s', %3$b" + (plugin.hasGeyserSupport() ? ", %4$b" : "") + ") ON DUPLICATE KEY UPDATE " + Columns.PREMIUM.getName() + " = %3$b" + (plugin.hasGeyserSupport() ? ", " + Columns.BEDROCK.getName() + " = %4$b" : "") + ";";
 		SQLDelete = "DELETE FROM %s WHERE " + Columns.NAME.getName() + "='%s';";
 	}
