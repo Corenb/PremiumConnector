@@ -28,6 +28,12 @@ backend:
   table: premium
   # If connection should use SSL
   useSSL: true
+  # Column for storing name
+  columnName: Name
+  # Column for storing if user is premium
+  columnPremium: Premium
+  # Column for storing if user is bedrock (floodgate)
+  columnBedrock: Bedrock
   
 # Allow cracked player to use premium username
 secondAttempt: true

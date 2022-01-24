@@ -10,7 +10,7 @@ import eu.horyzon.premiumconnector.PremiumConnector;
 import net.md_5.bungee.config.Configuration;
 
 public class SQLiteDataSource extends DataSource {
-	private static String SQL_ALTER = "ALTER TABLE %s ADD COLUMN Bedrock BOOLEAN NULL DEFAULT 0;";
+	private static String SQL_ALTER = "ALTER TABLE %s ADD COLUMN %s BOOLEAN NULL DEFAULT 0;";
 
 	public SQLiteDataSource(PremiumConnector plugin, Configuration configBackend) throws ClassNotFoundException, SQLException {
         super(plugin, configBackend);
@@ -46,7 +46,7 @@ public class SQLiteDataSource extends DataSource {
 				DatabaseMetaData md = connection.getMetaData();
 
 				if (isColumnMissing(md, "Bedrock"))
-					statement.addBatch(String.format(SQL_ALTER, table));
+					statement.addBatch(String.format(SQL_ALTER, table, Columns.NAME.getName()));
 			}
 
 			statement.executeBatch();

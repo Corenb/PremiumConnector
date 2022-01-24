@@ -22,6 +22,7 @@ import eu.horyzon.premiumconnector.redirect.AuthRedirect;
 import eu.horyzon.premiumconnector.redirect.MultiLobbyRedirect;
 import eu.horyzon.premiumconnector.redirect.ServerRedirect;
 import eu.horyzon.premiumconnector.session.PlayerSessionManager;
+import eu.horyzon.premiumconnector.sql.Columns;
 import eu.horyzon.premiumconnector.sql.DataSource;
 import eu.horyzon.premiumconnector.sql.MySQLDataSource;
 import eu.horyzon.premiumconnector.sql.SQLManager;
@@ -108,6 +109,8 @@ public class PremiumConnector extends Plugin {
 
 	private void setupDatabase() throws Exception {
 		Configuration configBackend = config.getSection("backend");
+
+		Columns.setup(configBackend);
 		try {
 			source = configBackend.getString("driver").contains("sqlite") ? new SQLiteDataSource(this, configBackend) : new MySQLDataSource(this, configBackend);
 		} catch (Exception exception) {
