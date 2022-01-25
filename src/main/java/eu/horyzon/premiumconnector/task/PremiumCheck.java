@@ -39,7 +39,7 @@ public class PremiumCheck implements Runnable {
 					// Check if the plugin allow second attempt
 					if (plugin.allowSecondAttempt()) {
 						playerSession.setPremium(false);
-						plugin.getSQLManager().update(playerSession);
+						plugin.getDataSource().update(playerSession);
 
 						plugin.getLogger().fine("Player " + name + " try to connect for the second attempt and has been defined as cracked.");
 					} else {
@@ -51,14 +51,14 @@ public class PremiumCheck implements Runnable {
 			} else {
 				try {
 					// Try to load SQL data
-					playerSession = plugin.getSQLManager().loadPlayerSessionFromConnection(name);
+					playerSession = plugin.getDataSource().loadPlayerSessionFromConnection(name);
 
 					plugin.getLogger().fine("Data successfully loaded from SQL for player " + name + " as " + (playerSession.isPremium() ? "premium" : "cracked") + ".");
 
 					if (plugin.hasGeyserSupport())
 						if (!playerSession.hasEditionDefined()) {
 							playerSession.setBedrock(plugin.isFromGeyserProxy(ip));
-							plugin.getSQLManager().update(playerSession);
+							plugin.getDataSource().update(playerSession);
 
 							plugin.getLogger().fine("Player " + name + " use " + (playerSession.isBedrock() ? "bedrock" : "java") + " edition.");
 						} else if (playerSession.isBedrock() != plugin.isFromGeyserProxy(ip)) {
@@ -84,7 +84,7 @@ public class PremiumCheck implements Runnable {
 						plugin.getLogger().fine("Player " + name + " defined as cracked cause no Mojang profile found.");
 
 					if (!plugin.allowSecondAttempt())
-						plugin.getSQLManager().update(playerSession);
+						plugin.getDataSource().update(playerSession);
 				}
 
 				plugin.getPlayerSessionManager().addSession(playerSession);

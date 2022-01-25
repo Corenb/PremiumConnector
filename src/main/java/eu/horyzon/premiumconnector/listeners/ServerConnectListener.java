@@ -39,7 +39,7 @@ public class ServerConnectListener implements Listener {
 			String ip = address.substring(1, address.indexOf(':'));
 			if (plugin.getSecondAttempts().remove(name + ip)) {
 				try {
-					plugin.getSQLManager().update(playerSession);
+					plugin.getDataSource().update(playerSession);
 				} catch (SQLException exception) {
 					exception.printStackTrace();
 					plugin.getLogger().warning("SQL error on updating player" + name);

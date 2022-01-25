@@ -27,42 +27,42 @@ public class CommandBase extends Command {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		try {
-			if (args.length > 0) {
-				if (!sender.hasPermission("premiumconnector.admin"))
-					Message.NO_PERMISSION.sendMessage(sender);
-				else
-					update(sender, args[0], command);
-			} else if (sender instanceof ProxiedPlayer) {
-				UUID playerUUID = ((ProxiedPlayer) sender).getUniqueId();
-				if (command != CommandType.PREMIUM || canConfirm(confirm.remove(playerUUID)))
-					update(sender, sender.getName(), command);
-				else {
-					Message.WARN_COMMAND.sendMessage(sender, "%cmd%", command.getCommandName(), "%status%", command.getStatus().toString());
-					confirm.put(playerUUID, System.currentTimeMillis());
-				}
-			} else
-				Message.CONSOLE_COMMAND.sendMessage(sender, "%cmd%", command.getCommandName());
-		} catch (SQLException exception) {
-			Message.ERROR_COMMAND.sendMessage(sender);
-			exception.printStackTrace();
-		}
+		if (args.length > 0) {
+			if (!sender.hasPermission("premiumconnector.admin"))
+				Message.NO_PERMISSION.sendMessage(sender);
+			else
+				update(sender, args[0], command);
+		} else if (sender instanceof ProxiedPlayer) {
+			UUID playerUUID = ((ProxiedPlayer) sender).getUniqueId();
+			if (command != CommandType.PREMIUM || canConfirm(confirm.remove(playerUUID)))
+				update(sender, sender.getName(), command);
+			else {
+				Message.WARN_COMMAND.sendMessage(sender, "%cmd%", command.getCommandName(), "%status%", command.getStatus().toString());
+				confirm.put(playerUUID, System.currentTimeMillis());
+			}
+		} else
+			Message.CONSOLE_COMMAND.sendMessage(sender, "%cmd%", command.getCommandName());
 	}
 
-	protected void update(CommandSender sender, String playerName, CommandType command) throws SQLException {
+	protected void update(CommandSender sender, String playerName, CommandType command) {
 		try {
-			PlayerSession playerSession = plugin.getSQLManager().loadPlayerSessionFromConnection(playerName);
-			if (command == CommandType.PREMIUM && !playerSession.isPremium() || command == CommandType.CRACKED && playerSession.isPremium()) {
-				playerSession.setPremium(command == CommandType.PREMIUM);
-				plugin.getSQLManager().update(playerSession);
-			} else if (command == CommandType.RESET)
-				plugin.getSQLManager().delete(playerSession);
+			PlayerSession playerSession = plugin.getPlayerSessionManager().getSession(playerName);
+			if (playerSession == null)
+				playerSession = plugin.getDataSource().loadPlayerSessionFromConnection(playerName);
+
+			if ((playerSession.isPremium() && command == CommandType.PREMIUM) || (!playerSession.isPremium() && command == CommandType.CRACKED))
+				(sender.getName().equals(playerName) ? Message.ALREADY_DEFINED : Message.ALREADY_DEFINED_OTHER).sendMessage(sender, "%player%", playerName, "%status%", command.getStatus().toString());
 			else {
-				(sender.getName().equals(playerName) ? Message.FAIL_COMMAND : Message.FAIL_COMMAND_OTHER).sendMessage(sender, "%player%", playerName, "%status%", command.getStatus().toString());
-				return;
-			}
+				if (command == CommandType.RESET) {
+					plugin.getPlayerSessionManager().removeSession(playerName);
+					plugin.getDataSource().delete(playerSession);
+				} else {
+					playerSession.setPremium(command == CommandType.PREMIUM);
+					plugin.getDataSource().update(playerSession);
+				}
 
 				(sender.getName().equals(playerName) ? Message.SUCCESS_COMMAND : Message.SUCCESS_COMMAND_OTHER).sendMessage(sender, "%player%", playerName, "%status%", command.getStatus().toString());
+			}
 		} catch (NullPointerException exception) {
 			Message.NO_PLAYER.sendMessage(sender, "%player%", playerName);
 		} catch (SQLException exception) {

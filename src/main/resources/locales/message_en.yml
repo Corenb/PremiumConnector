@@ -17,6 +17,8 @@ wrongEdition: |-
 consoleCommand: '%prefix% &cPlease use /%cmd% [player]'
 noPermission: '%prefix% &cYou don''t have the permission to do this.'
 noPlayer: '%prefix% &cPlayer %player% not found.'
+alreadyDefined: '%prefix% &cYou are already defined as &6&l%status%&c.'
+alreadyDefinedOther: '%prefix% &c%player% is already defined as &6&l%status%&c.'
 warnCommand: '%prefix% &c&lWARNING &6This command should &lonly &6be invoked if you are the owner of this paid minecraft account. Type &a/premium &6command again to confirm.'
 successCommand: '%prefix% &6You are now &l%status%&6, you need to reconnect you to the server to apply changes.'
 failCommand: '%prefix% &cYou are already a &6&l%status% &cuser.'

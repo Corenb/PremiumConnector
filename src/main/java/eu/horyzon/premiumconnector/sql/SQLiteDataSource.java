@@ -1,16 +1,11 @@
 package eu.horyzon.premiumconnector.sql;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import eu.horyzon.premiumconnector.PremiumConnector;
 import net.md_5.bungee.config.Configuration;
 
 public class SQLiteDataSource extends DataSource {
-	private static String SQL_ALTER = "ALTER TABLE %s ADD COLUMN %s BOOLEAN NULL DEFAULT 0;";
 
 	public SQLiteDataSource(PremiumConnector plugin, Configuration configBackend) throws ClassNotFoundException, SQLException {
         super(plugin, configBackend);
@@ -36,27 +31,4 @@ public class SQLiteDataSource extends DataSource {
 
         plugin.getLogger().info("SQLite driver loaded");
 	}
-
-    protected void initDatabase(boolean floodgate) throws SQLException {
-		try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
-			connection.setAutoCommit(false);
-
-			statement.addBatch(String.format(SQL_CREATE, table));
-			if (floodgate) {
-				DatabaseMetaData metaData = connection.getMetaData();
-
-				if (isColumnMissing(metaData, "Bedrock"))
-					statement.addBatch(String.format(SQL_ALTER, table, Columns.BEDROCK.getName()));
-			}
-
-			statement.executeBatch();
-			connection.commit();
-		}
-	}
-
-    private boolean isColumnMissing(DatabaseMetaData metaData, String columnName) throws SQLException {
-        try (ResultSet resultSet = metaData.getColumns(null, null, table, columnName)) {
-            return !resultSet.next();
-        }
-    }
 }

@@ -1,28 +1,30 @@
 prefix: "&8[&6PremiumConnector&8]&r"
 mySQLError: |-
-  &c          Erreur base de donnÃ©e!
-  &cMerci de rÃ©essayer plus tard ou contacter un administrateur
+  &c          Erreur base de donnée!
+  &cMerci de réessayer plus tard ou contacter un administrateur
 notPremiumError: |-
-  &2     Vous n'Ãªtes pas le propriÃ©taire du compte
+  &2     Vous n'êtes pas le propriétaire du compte
   &2Merci de modifier votre pseudo pour rejoindre le serveur!
 mojanServerError: |-
   &c       Erreur d'authentification
-  &cLes serveurs de Mojang sont actuellement hors-ligne, veuillez rÃ©essayer plus tard!
+  &cLes serveurs de Mojang sont actuellement hors-ligne, veuillez réessayer plus tard!
 rateLimit: |-
   &c       Erreur d'authentification
-  &cLe processus d'authentification est actuellement surchargÃ©. Merci de rÃ©essayer dans 1 minute.
+  &cLe processus d'authentification est actuellement surchargé. Merci de réessayer dans 1 minute.
 wrongEdition: |-
-  &c       Mauvaise Ã©dition
-  &cMerci de rejoindre avec votre Ã©dition de Minecraft habituelle
+  &c       Mauvaise édition
+  &cMerci de rejoindre avec votre édition de Minecraft habituelle
 consoleCommand: '%prefix% &cMerci d''utiliser /%cmd% [player]'
 noPermission: '%prefix% &cVous n''avez pas la permission d''executer la commande.'
 noPlayer: '%prefix% &cJoueur %player% inconnu.'
-warnCommand: '%prefix% &c&lATTENTION &6Cette commande ne doit Ãªtre invoquÃ©e &luniquement &6si vous Ãªtes le propriÃ©taire du compte Minecraft. Faites la commande &a/premium &6pour confirmer.'
-successCommand: '%prefix% &6Votre compte est dÃ©sormais &l%status%&6, vous devez vous reconnecter pour appliquer les changements.'
-failCommand: '%prefix% &cVotre compte est dÃ©jÃ  dÃ©fini comme &6&l%status% &c.'
-successCommandOther: '%prefix% &6Le compte du joueur %player% est dÃ©sormais &l%status%&6, il/elle doit se reconnecter sur le serveur pour appliquer les changements.'
-failCommandOther: '%prefix% &cLe compte du joueur %player% est dÃ©jÃ  dÃ©fini comme &6&l%status% &c.'
-errorCommand: '&c%prefix% Erreur lors de l'exÃ©cution de la commande. Merci de rÃ©essayer ou contacter un administrateur.'
+alreadyDefined: '%prefix% &cVous êtes déjà défini(e) comme &6&l%status% &c.'
+alreadyDefinedOther: '%prefix% &c%player% est déjà défini(e) comme &6&l%status% &c.'
+warnCommand: '%prefix% &c&lATTENTION &6Cette commande ne doit être invoquée &luniquement &6si vous êtes le propriétaire du compte Minecraft. Faites la commande &a/premium &6pour confirmer.'
+successCommand: '%prefix% &6Votre compte est désormais &l%status%&6, vous devez vous reconnecter pour appliquer les changements.'
+failCommand: '%prefix% &cVotre compte est déjà défini comme &6&l%status% &c.'
+successCommandOther: '%prefix% &6Le compte du joueur %player% est désormais &l%status%&6, il/elle doit se reconnecter sur le serveur pour appliquer les changements.'
+failCommandOther: '%prefix% &cLe compte du joueur %player% est déjà défini comme &6&l%status% &c.'
+errorCommand: '&c%prefix% Erreur lors de l'exécution de la commande. Merci de réessayer ou contacter un administrateur.'
 crackedStatus: 'Crack'
 premiumStatus: 'Premium'
-noStatus: 'Non dÃ©fini'
+noStatus: 'Non défini'

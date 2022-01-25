@@ -25,7 +25,6 @@ import eu.horyzon.premiumconnector.session.PlayerSessionManager;
 import eu.horyzon.premiumconnector.sql.Columns;
 import eu.horyzon.premiumconnector.sql.DataSource;
 import eu.horyzon.premiumconnector.sql.MySQLDataSource;
-import eu.horyzon.premiumconnector.sql.SQLManager;
 import eu.horyzon.premiumconnector.sql.SQLiteDataSource;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -39,7 +38,6 @@ public class PremiumConnector extends Plugin {
 	private Configuration config;
 	private MojangResolver resolver;
 	private DataSource source;
-	private SQLManager SQLManager;
 	private boolean secondAttempt,
 			blockServerSwitch;
 
@@ -116,8 +114,6 @@ public class PremiumConnector extends Plugin {
 		} catch (Exception exception) {
 			throw exception;
 		}
-
-		SQLManager = new SQLManager(this, source);
 	}
 
 	private void setupMessages() throws IOException {
@@ -166,10 +162,6 @@ public class PremiumConnector extends Plugin {
 
 	public DataSource getDataSource() {
 		return source;
-	}
-
-	public SQLManager getSQLManager() {
-		return SQLManager;
 	}
 
 	public RedirectManager getRedirectManager() {

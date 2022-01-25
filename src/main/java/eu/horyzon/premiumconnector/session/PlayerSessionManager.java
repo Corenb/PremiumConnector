@@ -13,4 +13,8 @@ public class PlayerSessionManager {
 	public void addSession(PlayerSession session) {
 		playerSession.put(session.getName(), session);
 	}
+
+	public void removeSession(String username) {
+		playerSession.remove(username);
+	}
 }
