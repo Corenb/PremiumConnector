@@ -91,25 +91,25 @@
   <dependencies>
     <!--Needed for access to UserConnection class-->
     <dependency>
-        <groupId>net.md-5</groupId>
-        <artifactId>bungeecord-proxy</artifactId>
-        <version>1.18-R0.1-SNAPSHOT</version>
-        <type>jar</type>
-        <scope>provided</scope>
+      <groupId>net.md-5</groupId>
+      <artifactId>bungeecord-proxy</artifactId>
+      <version>1.18-R0.1-SNAPSHOT</version>
+      <type>jar</type>
+      <scope>provided</scope>
     </dependency>
     <dependency>
-        <groupId>net.md-5</groupId>
-        <artifactId>bungeecord-api</artifactId>
-        <version>1.18-R0.1-SNAPSHOT</version>
-        <type>jar</type>
-        <scope>provided</scope>
+      <groupId>net.md-5</groupId>
+      <artifactId>bungeecord-api</artifactId>
+      <version>1.18-R0.1-SNAPSHOT</version>
+      <type>jar</type>
+      <scope>provided</scope>
     </dependency>
     <dependency>
-        <groupId>net.md-5</groupId>
-        <artifactId>bungeecord-api</artifactId>
-        <version>1.18-R0.1-SNAPSHOT</version>
-        <type>javadoc</type>
-        <scope>provided</scope>
+      <groupId>net.md-5</groupId>
+      <artifactId>bungeecord-api</artifactId>
+      <version>1.18-R0.1-SNAPSHOT</version>
+      <type>javadoc</type>
+      <scope>provided</scope>
     </dependency>
     <!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
     <dependency>
