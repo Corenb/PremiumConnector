@@ -62,7 +62,7 @@ public class CommandBase extends Command {
 				return;
 			}
 
-			(sender.getName().equals(playerName) ? Message.SUCESS_COMMAND : Message.SUCESS_COMMAND_OTHER).sendMessage(sender, "%player%", playerName, "%status%", command.getStatus().toString());
+				(sender.getName().equals(playerName) ? Message.SUCCESS_COMMAND : Message.SUCCESS_COMMAND_OTHER).sendMessage(sender, "%player%", playerName, "%status%", command.getStatus().toString());
 		} catch (NullPointerException exception) {
 			Message.NO_PLAYER.sendMessage(sender, "%player%", playerName);
 		} catch (SQLException exception) {
