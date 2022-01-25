@@ -121,14 +121,15 @@ public class PremiumConnector extends Plugin {
 	}
 
 	private void setupMessages() throws IOException {
-		Configuration messageConfiguration;
+		Configuration configMessage;
 		try {
-			messageConfiguration = loadConfiguration(getDataFolder(), "locales/message_" + config.getString("locale", "en") + ".yml");
+			configMessage = loadConfiguration(getDataFolder(), "locales/message_" + config.getString("locale", "en") + ".yml");
 		} catch (NullPointerException exception) {
-			messageConfiguration = loadConfiguration(getDataFolder(), "locales/message_en.yml");
+			getLogger().warning("No default config \"locales/message_" + config.getString("locale", "en") + ".yml\" found.");
+			configMessage = loadConfiguration(getDataFolder(), "locales/message_en.yml");
 		}
 
-		Message.setup(messageConfiguration);
+		Message.setup(configMessage);
 	}
 
 	private void setupCommands() {
