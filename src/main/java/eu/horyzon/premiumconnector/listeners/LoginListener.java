@@ -57,8 +57,8 @@ public class LoginListener implements Listener {
 		} catch (Exception exception) {
 			exception.printStackTrace();
 			plugin.getLogger().warning("Failed to set offline uuid of " + username);
-		} catch (Throwable e) {
-			e.printStackTrace();
+		} catch (Throwable exception) {
+			exception.printStackTrace();
 		}
 	}
 }
