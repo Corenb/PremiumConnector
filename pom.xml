@@ -128,7 +128,7 @@
     <dependency>
       <groupId>com.github.games647</groupId>
       <artifactId>craftapi</artifactId>
-      <version>0.5-SNAPSHOT</version>
+      <version>0.5.1</version>
     </dependency>
     <dependency>
       <groupId>cz.gameteam</groupId>
